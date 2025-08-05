@@ -3,11 +3,13 @@ package com.ll.stopnoise.domain.comment.entity;
 import com.ll.stopnoise.domain.customer.entity.Customer;
 import com.ll.stopnoise.domain.post.entity.Post;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NonNull;
+import lombok.*;
 
 @Entity
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
