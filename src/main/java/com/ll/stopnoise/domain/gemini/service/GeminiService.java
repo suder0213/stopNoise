@@ -44,8 +44,4 @@ public class GeminiService {
 
         return "응답 없음";
     }
-
-    public String apikey() {
-        return apiKey;
-    }
 }

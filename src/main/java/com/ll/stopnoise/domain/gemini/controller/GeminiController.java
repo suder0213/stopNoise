@@ -22,10 +22,4 @@ public class GeminiController {
         return geminiService.askGemini(prompt);
     }
 
-    @GetMapping("/api")
-    public String api() {
-        return geminiService.apikey();
-    }
-
-
 }
