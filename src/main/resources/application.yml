@@ -5,9 +5,9 @@ spring:
     active: dev
     include: secret
   datasource:
-    url: jdbc:mysql://localhost:3306/stopNoise
-    username: root
-    password: pswd
+    url: jdbc:mysql://stopnoise.c98mwioqyg18.ap-southeast-2.rds.amazonaws.com:3306/stopNoise?serverTimezone=UTC&characterEncoding=UTF-8
+    username: stopNoise_admin
+    password: ajtwoddltkwkcjfja
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
