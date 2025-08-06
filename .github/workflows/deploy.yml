@@ -40,7 +40,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/stopnoise-app:latest
 
-      # --- SSH를 통한 EC2 배포 단계 ---
+      # deploy.yml 파일의 수정된 부분
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -48,12 +48,4 @@ jobs:
           username: ec2-user
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            # 기존 Docker 컨테이너 중지 및 삭제
-            docker stop stopnoise-container || true
-            docker rm stopnoise-container || true
-
-            # Docker Hub에서 최신 이미지 받기
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/stopnoise-app:latest
-
-            # 새로운 Docker 컨테이너 실행
-            docker run -d --name stopnoise-container -p 8090:8090 -e DB_URL=${{ secrets.DB_URL }} -e DB_USERNAME=${{ secrets.DB_USERNAME }} -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} -e GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }} ${{ secrets.DOCKERHUB_USERNAME }}/stopnoise-app:latest
+            docker stop stopnoise-container || true && docker rm stopnoise-container || true && docker pull ${{ secrets.DOCKERHUB_USERNAME }}/stopnoise-app:latest && docker run -d --name stopnoise-container -p 8090:8090 -e DB_URL=${{ secrets.DB_URL }} -e DB_USERNAME=${{ secrets.DB_USERNAME }} -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} -e GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }} ${{ secrets.DOCKERHUB_USERNAME }}/stopnoise-app:latest
