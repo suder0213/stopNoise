@@ -13,7 +13,7 @@ public class GeminiService {
     @Value("${gemini.api-key}")
     private String apiKey;
 
-    private final String API_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=" + apiKey;
+    private final String API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=";
 
     public String askGemini(String prompt) {
         RestTemplate restTemplate = new RestTemplate();
