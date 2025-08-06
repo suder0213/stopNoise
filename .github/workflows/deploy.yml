@@ -42,10 +42,10 @@ jobs:
 
       # deploy.yml 파일의 수정된 부분
       - name: Deploy to EC2
-        uses: appleboy/ssh-action@v1.0.3
+        uses: appleboy/ssh-action@v1.0.3  # 버전 업데이트를 v1.0.4로 고려해보세요.
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            bash -c "docker stop stopnoise-container || true && docker rm stopnoise-container || true && docker pull ${{ secrets.DOCKERHUB_USERNAME }}/stopnoise-app:latest && docker run -d --name stopnoise-container -p 8090:8090 -e DB_URL=${{ secrets.DB_URL }} -e DB_USERNAME=${{ secrets.DB_USERNAME }} -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} -e GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }} ${{ secrets.DOCKERHUB_USERNAME }}/stopnoise-app:latest"
+          script: > # '|' 대신 '>'를 사용합니다.
+            docker stop stopnoise-container || true && docker rm stopnoise-container || true && docker pull ${{ secrets.DOCKERHUB_USERNAME }}/stopnoise-app:latest && docker run -d --name stopnoise-container -p 8090:8090 -e DB_URL="${{ secrets.DB_URL }}" -e DB_USERNAME="${{ secrets.DB_USERNAME }}" -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" -e GEMINI_API_KEY="${{ secrets.GEMINI_API_KEY }}" ${{ secrets.DOCKERHUB_USERNAME }}/stopnoise-app:latest
