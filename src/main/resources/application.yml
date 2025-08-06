@@ -30,3 +30,6 @@ spring:
 custom:
   site:
     name: "My Site"
+
+gemini:
+  api-key: "AIzaSyC6sd9IpfzQQeaWqJqm4Sk-CrVcjTj8T4Q"
