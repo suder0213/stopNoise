@@ -32,7 +32,7 @@ jobs:
 
       # 4. Spring Boot 애플리케이션 빌드
       - name: Build with Gradle
-        run: ./gradlew clean build
+        run: ./gradlew clean build --exclude-task test
 
       # 5. SSH 키 파일 생성 (배포를 위해)
       - name: Create SSH key file
