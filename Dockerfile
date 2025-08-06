@@ -1,5 +1,5 @@
 # 사용할 기본 이미지 (Amazon Corretto 17 버전)
-FROM amazoncorretto:17-alpine-jre
+FROM amazoncorretto:17
 
 # 환경 변수 설정
 # JAR_FILE 변수에 빌드된 JAR 파일의 경로를 저장
