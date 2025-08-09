@@ -33,3 +33,15 @@ custom:
 
 gemini:
   api-key: ${GEMINI_API_KEY}
+
+
+aws:
+  credentials:
+    access-key: AKIAQ7ODGULSFJG7YZPU
+    secret-key: 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
+  s3:
+    bucket: stopnoise-audio-files
+  region:
+    static: ap-southeast-2 # 예: ap-northeast-2
+  stack:
+    auto: false
