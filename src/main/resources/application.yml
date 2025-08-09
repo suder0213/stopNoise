@@ -37,8 +37,8 @@ gemini:
 
 aws:
   credentials:
-    access-key: AKIAQ7ODGULSFJG7YZPU
-    secret-key: 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
+    access-key: ${S3_ACCESS_KEY}
+    secret-key: ${S3_SECRET_KEY}
   s3:
     bucket: stopnoise-audio-files
   region:
