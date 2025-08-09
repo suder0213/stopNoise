@@ -5,6 +5,7 @@ import com.ll.stopnoise.domain.customer.entity.Customer;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -17,14 +18,26 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String title;
-    private String content;
 
     @ManyToOne
-    @NonNull
-    @JoinColumn(name = "author")
+    @JoinColumn(name = "author", nullable = false)
     private Customer author;
+
+    @Column(nullable = false)
+    private String title;
+
+    @Column(columnDefinition = "TEXT",nullable = false)
+    private String content;
+
+    @Column(nullable = false)
+    private String category;
+
+    private Integer viewCount;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
+
 }

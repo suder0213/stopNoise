@@ -1,33 +1,37 @@
-package com.ll.stopnoise.domain.noiseData.entity;
+package com.ll.stopnoise.domain.noiseReport.entity;
 
 import com.ll.stopnoise.domain.customer.entity.Customer;
 import com.ll.stopnoise.domain.reportNoiseData.entity.ReportNoiseData;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-public class NoiseData {
+@Getter
+@Setter
+@Table(name = "noise_reports")
+public class NoiseReport {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Id;
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    private Integer decibelLevel;
-    private String noiseType;
-
-    @Column(nullable = false)
-    private String dataFileUrl;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     @Column(columnDefinition = "TEXT")
-    private String memo;
+    private String analysisSummary;
 
-    private LocalDateTime uploadTime;
+    private LocalDateTime createAt;
 
-    @OneToMany(mappedBy = "noiseData")
+    @OneToMany(mappedBy = "noiseReport")
     private List<ReportNoiseData> reportNoiseData;
 }

@@ -5,6 +5,8 @@ import com.ll.stopnoise.domain.post.entity.Post;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Builder
@@ -14,15 +16,18 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String content;
 
-    @NonNull
+
+    @ManyToOne
+    @JoinColumn(name = "post_id", nullable = false)
+    private Post post;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "writer")
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    @NonNull
-    @ManyToOne
-    @JoinColumn(name = "post")
-    private Post post;
+    @Column(columnDefinition = "TEXT",nullable = false)
+    private String content;
+
+    private LocalDateTime createdAt;
 }
