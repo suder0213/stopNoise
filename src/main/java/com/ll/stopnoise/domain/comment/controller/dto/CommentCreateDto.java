@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class CommentCreateDto {
-    private String content;
     private int authorId;
     private int postId;
+    private String content;
 }

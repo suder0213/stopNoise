@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,9 +28,13 @@ public class PostService {
         }
 
         Post post = Post.builder()
+                .author(customer.get())
                 .title(postCreateDto.getTitle())
                 .content(postCreateDto.getContent())
-                .author(customerRepository.findById(postCreateDto.getAuthorId()).orElse(null))
+                .category(postCreateDto.getCategory())
+                .viewCount(0)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .build();
         return postRepository.save(post);
     }

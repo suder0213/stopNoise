@@ -4,6 +4,7 @@ import com.ll.stopnoise.domain.post.entity.Post;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,10 +12,14 @@ import java.util.List;
 @Builder
 public class PostReadDto {
     private int id;
+    private int authorId;
     private String title;
     private String content;
-    private int authorId;
+    private String category;
+    private Integer viewCount;
     private List<Integer> commentIds;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public static PostReadDto from(Post post) {
         List<Integer> commentIds = new ArrayList<>();
@@ -23,10 +28,14 @@ public class PostReadDto {
         }
         PostReadDto dto = PostReadDto.builder()
                 .id(post.getId())
+                .authorId(post.getAuthor().getId())
                 .title(post.getTitle())
                 .content(post.getContent())
-                .authorId(post.getAuthor().getId())
+                .category(post.getCategory())
+                .viewCount(post.getViewCount())
                 .commentIds(commentIds)
+                .createdAt(post.getCreatedAt())
+                .updatedAt(post.getUpdatedAt())
                 .build();
         return dto;
     }

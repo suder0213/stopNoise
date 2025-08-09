@@ -18,17 +18,22 @@ public class CommentController {
 
 
     @PostMapping
-    public CommentReadDto createComment(@RequestBody CommentCreateDto commentCreateDto) {
+    public CommentReadDto create(@RequestBody CommentCreateDto commentCreateDto) {
         return CommentReadDto.from(commentService.create(commentCreateDto));
     }
 
     @GetMapping("/{id}")
-    public CommentReadDto getComment(@PathVariable int id) {
+    public CommentReadDto get(@PathVariable int id) {
         return CommentReadDto.from(commentService.getById(id));
     }
     @GetMapping
-    public List<CommentReadDto> getAllComments() {
+    public List<CommentReadDto> getAll() {
         return commentService.getAll().stream().map(CommentReadDto::from).collect(Collectors.toList());
+    }
+
+    @GetMapping("/post/{id}")
+    public List<CommentReadDto> getByPostId(@PathVariable int id) {
+        return commentService.getByPostId(id).stream().map(CommentReadDto::from).collect(Collectors.toList());
     }
 
     // 수정 기능 X
@@ -38,7 +43,7 @@ public class CommentController {
 //    }
 
     @DeleteMapping("/{id}")
-    public String deleteComment(@PathVariable int id) {
+    public String delete(@PathVariable int id) {
         commentService.delete(id);
         return "Comment %d deleted".formatted(id);
     }
