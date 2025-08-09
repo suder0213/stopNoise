@@ -4,10 +4,10 @@ import com.ll.stopnoise.domain.comment.controller.dto.CommentCreateDto;
 import com.ll.stopnoise.domain.comment.controller.dto.CommentReadDto;
 import com.ll.stopnoise.domain.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,8 +15,31 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommentController {
     private final CommentService commentService;
 
+
+
     @PostMapping
     public CommentReadDto createComment(@RequestBody CommentCreateDto commentCreateDto) {
-        return CommentReadDto.fromDto(commentService.create(commentCreateDto));
+        return CommentReadDto.from(commentService.create(commentCreateDto));
+    }
+
+    @GetMapping("/{id}")
+    public CommentReadDto getComment(@PathVariable int id) {
+        return CommentReadDto.from(commentService.getById(id));
+    }
+    @GetMapping
+    public List<CommentReadDto> getAllComments() {
+        return commentService.getAll().stream().map(CommentReadDto::from).collect(Collectors.toList());
+    }
+
+    // 수정 기능 X
+//    @PutMapping
+//    public CommentReadDto updateComment(@RequestBody CustomerUpdateDto customerUpdateDto) {
+//        return CommentReadDto.from(commentService.update(customerUpdateDto));
+//    }
+
+    @DeleteMapping("/{id}")
+    public String deleteComment(@PathVariable int id) {
+        commentService.delete(id);
+        return "Comment %d deleted".formatted(id);
     }
 }

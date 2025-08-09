@@ -20,7 +20,7 @@ public class Post {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "author", nullable = false)
+    @JoinColumn(name = "author_id", nullable = false)
     private Customer author;
 
     @Column(nullable = false)

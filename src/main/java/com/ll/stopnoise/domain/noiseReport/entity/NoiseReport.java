@@ -3,8 +3,7 @@ package com.ll.stopnoise.domain.noiseReport.entity;
 import com.ll.stopnoise.domain.customer.entity.Customer;
 import com.ll.stopnoise.domain.reportNoiseData.entity.ReportNoiseData;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,6 +12,9 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "noise_reports")
 public class NoiseReport {
 

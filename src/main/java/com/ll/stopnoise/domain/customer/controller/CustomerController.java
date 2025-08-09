@@ -2,7 +2,7 @@ package com.ll.stopnoise.domain.customer.controller;
 
 import com.ll.stopnoise.domain.customer.controller.dto.CustomerCreateDto;
 import com.ll.stopnoise.domain.customer.controller.dto.CustomerReadDto;
-import com.ll.stopnoise.domain.customer.entity.Customer;
+import com.ll.stopnoise.domain.customer.controller.dto.CustomerUpdateDto;
 import com.ll.stopnoise.domain.customer.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +18,7 @@ public class CustomerController {
 
     @PostMapping
     public CustomerReadDto createCustomer(@RequestBody CustomerCreateDto customerCreateDto) {
-        return CustomerReadDto.from(customerService.createCustomer(customerCreateDto.getName()));
+        return CustomerReadDto.from(customerService.createCustomer(customerCreateDto));
     }
 
     @GetMapping("/{id}")
@@ -31,13 +31,14 @@ public class CustomerController {
     }
 
     @PutMapping
-    public CustomerReadDto updateCustomer(@RequestBody Customer customer) {
-        return CustomerReadDto.from(customerService.updateCustomer(customer));
+    public CustomerReadDto updateCustomer(@RequestBody CustomerUpdateDto customerUpdateDto) {
+        return CustomerReadDto.from(customerService.updateCustomer(customerUpdateDto));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCustomer(@PathVariable int id) {
+    public String deleteCustomer(@PathVariable int id) {
         customerService.deleteCustomer(id);
+        return "Customer %d deleted".formatted(id);
     }
 
 }

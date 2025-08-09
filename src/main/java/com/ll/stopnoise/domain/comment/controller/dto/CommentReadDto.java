@@ -12,7 +12,7 @@ public class CommentReadDto {
     private int writerId;
     private int postId;
 
-    public static CommentReadDto fromDto(Comment comment) {
+    public static CommentReadDto from(Comment comment) {
         return CommentReadDto.builder()
                 .id(comment.getId())
                 .writerId(comment.getCustomer().getId())

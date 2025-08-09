@@ -1,6 +1,8 @@
 package com.ll.stopnoise.domain.customer.service;
 
 import com.ll.stopnoise.domain.customer.Repository.CustomerRepository;
+import com.ll.stopnoise.domain.customer.controller.dto.CustomerCreateDto;
+import com.ll.stopnoise.domain.customer.controller.dto.CustomerUpdateDto;
 import com.ll.stopnoise.domain.customer.entity.Customer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,8 +17,12 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
 
     @Transactional
-    public Customer createCustomer(String name) {
-        return customerRepository.save( Customer.builder().name(name).build() );
+    public Customer createCustomer(CustomerCreateDto customerCreateDto) {
+        return customerRepository.save( Customer.builder()
+                        .name(customerCreateDto.getName())
+                        .dong(customerCreateDto.getDong())
+                        .ho(customerCreateDto.getHo())
+                .build() );
     }
 
     public Customer getCustomer(int id) {
@@ -32,14 +38,16 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
+    
+    // id로 찾아서 name만 변경 가능
     @Transactional
-    public Customer updateCustomer(Customer customer) {
-        Optional<Customer> customer_ = customerRepository.findById(customer.getId());
+    public Customer updateCustomer(CustomerUpdateDto customerUpdateDto) {
+        Optional<Customer> customer_ = customerRepository.findById(customerUpdateDto.getId());
         if (customer_.isEmpty()) {
             throw new IllegalArgumentException( "Customer not found" );
         }
         Customer customerToUpdate = customer_.get();
-        customerToUpdate.setName( customer.getName() );
+        customerToUpdate.setName( customerUpdateDto.getName() );
         return customerRepository.save( customerToUpdate );
     }
 
