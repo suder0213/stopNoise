@@ -1,6 +1,5 @@
 package com.ll.stopnoise.domain.noiseData.controller.dto;
 
-import com.ll.stopnoise.domain.customer.entity.Customer;
 import com.ll.stopnoise.domain.noiseData.entity.NoiseData;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +14,7 @@ public class NoiseDataReadDto {
 
     private int id;
 
-    private Customer customer;
+    private Integer customerId;
 
     private Integer decibelLevel;
     private String noiseType;
@@ -37,7 +36,7 @@ public class NoiseDataReadDto {
         }
         NoiseDataReadDto noiseDataReadDto = NoiseDataReadDto.builder()
                 .id(noiseData.getId())
-                .customer(noiseData.getCustomer())
+                .customerId(noiseData.getCustomer().getId())
                 .decibelLevel(noiseData.getDecibelLevel())
                 .noiseType(noiseData.getNoiseType())
                 .dataFileUrl(noiseData.getDataFileUrl())
