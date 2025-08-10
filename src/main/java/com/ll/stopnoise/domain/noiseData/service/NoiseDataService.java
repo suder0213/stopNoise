@@ -34,6 +34,10 @@ public class NoiseDataService {
         return noiseData.get();
     }
 
+    public List<NoiseData> getByUploadTimeBetween(LocalDateTime start, LocalDateTime end){
+        return noiseDataRepository.findByUploadTimeBetween(start, end);
+    }
+
     @Transactional
     public NoiseData create(NoiseDataCreateDto noiseDataCreateDto) {
         return NoiseData.builder()

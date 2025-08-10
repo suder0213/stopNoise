@@ -5,8 +5,8 @@ import com.ll.stopnoise.domain.reportNoiseData.entity.ReportNoiseData;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,14 +26,15 @@ public class NoiseReport {
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
 
     @Column(columnDefinition = "TEXT")
     private String analysisSummary;
 
     private LocalDateTime createAt;
 
-    @OneToMany(mappedBy = "noiseReport")
-    private List<ReportNoiseData> reportNoiseData;
+    @OneToMany(mappedBy = "noiseReport", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<ReportNoiseData> reportNoiseData = new ArrayList<>();
 }

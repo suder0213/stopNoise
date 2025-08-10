@@ -1,6 +1,5 @@
 package com.ll.stopnoise.domain.noiseReport.controller.dto;
 
-import com.ll.stopnoise.domain.customer.entity.Customer;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -8,8 +7,10 @@ import lombok.Getter;
 @Builder
 public class NoiseReportCreateDto {
 
-    private Customer customer;
+    private Integer customerId;
 
-    private String analysisSummary;
+    // YYYY-MM-DD 형식으로 입력 받음
+    private String startDate;
+    private String endDate;
 
 }

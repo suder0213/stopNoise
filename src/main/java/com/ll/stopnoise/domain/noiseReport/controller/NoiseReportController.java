@@ -25,7 +25,7 @@ public class NoiseReportController {
         return noiseReportService.getAll().stream().map(NoiseReportReadDto::from).collect(Collectors.toList());
     }
     @GetMapping("/{id}")
-    public NoiseReportReadDto getOne(@PathVariable Long id) {
+    public NoiseReportReadDto getOne(@PathVariable Integer id) {
         return NoiseReportReadDto.from(noiseReportService.getById(id));
     }
 //    @PutMapping
@@ -33,7 +33,7 @@ public class NoiseReportController {
 //
 //    }
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long id) {
+    public String delete(@PathVariable Integer id) {
         noiseReportService.delete(id);
         return "NoiseReport %d deleted".formatted(id);
     }

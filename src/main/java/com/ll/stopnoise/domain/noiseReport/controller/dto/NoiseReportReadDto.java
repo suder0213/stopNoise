@@ -4,10 +4,10 @@ import com.ll.stopnoise.domain.noiseReport.entity.NoiseReport;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -17,8 +17,8 @@ public class NoiseReportReadDto {
 
     private int customerId;
 
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
 
     private String analysisSummary;
 
@@ -27,13 +27,11 @@ public class NoiseReportReadDto {
     private List<Integer> reportNoiseDataIds;
 
     public static NoiseReportReadDto from(NoiseReport noiseReport) {
-        List<Integer> reportNoiseDataIds = new ArrayList<>();
-
-        if (noiseReport.getReportNoiseData() != null) {
-            noiseReport.getReportNoiseData().forEach(noiseData -> {
-                reportNoiseDataIds.add(noiseData.getId());
-            });
-        }
+        // 수정된 부분: Stream을 사용하여 간결하게 ID 목록을 생성
+        List<Integer> reportNoiseDataIds = noiseReport.getReportNoiseData() != null ?
+                noiseReport.getReportNoiseData().stream()
+                        .map(reportNoiseData -> reportNoiseData.getId()) // 💡 reportNoiseData.getId()로 수정
+                        .collect(Collectors.toList()) : new ArrayList<>();
 
         NoiseReportReadDto noiseReportReadDto = NoiseReportReadDto.builder()
                 .id(noiseReport.getId())
