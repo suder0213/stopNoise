@@ -20,13 +20,13 @@ public class PostController {
     public PostReadDto create(@RequestBody PostCreateDto postCreateDto) {
         return PostReadDto.from(postService.create(postCreateDto));
     }
-    @GetMapping("/{id}")
-    public PostReadDto get(@PathVariable int id) {
-        return PostReadDto.from(postService.getPost(id));
-    }
     @GetMapping
     public List<PostReadDto> getAll() {
         return postService.getAllPost().stream().map(PostReadDto::from).collect(Collectors.toList());
+    }
+    @GetMapping("/{id}")
+    public PostReadDto get(@PathVariable int id) {
+        return PostReadDto.from(postService.getPost(id));
     }
 
     @PutMapping

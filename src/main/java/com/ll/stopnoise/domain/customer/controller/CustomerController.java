@@ -21,14 +21,16 @@ public class CustomerController {
         return CustomerReadDto.from(customerService.createCustomer(customerCreateDto));
     }
 
-    @GetMapping("/{id}")
-    public CustomerReadDto getCustomer(@PathVariable int id) {
-        return CustomerReadDto.from(customerService.getCustomer(id));
-    }
     @GetMapping
     public List<CustomerReadDto> getAllCustomers() {
         return customerService.getAllCustomer().stream().map(CustomerReadDto::from).collect(Collectors.toList());
     }
+
+    @GetMapping("/{id}")
+    public CustomerReadDto getCustomer(@PathVariable int id) {
+        return CustomerReadDto.from(customerService.getCustomer(id));
+    }
+
 
     @PutMapping
     public CustomerReadDto updateCustomer(@RequestBody CustomerUpdateDto customerUpdateDto) {

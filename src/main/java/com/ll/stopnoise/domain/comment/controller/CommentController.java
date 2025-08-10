@@ -15,21 +15,21 @@ import java.util.stream.Collectors;
 public class CommentController {
     private final CommentService commentService;
 
-
-
     @PostMapping
     public CommentReadDto create(@RequestBody CommentCreateDto commentCreateDto) {
         return CommentReadDto.from(commentService.create(commentCreateDto));
+    }
+
+    @GetMapping
+    public List<CommentReadDto> getAll() {
+        return commentService.getAll().stream().map(CommentReadDto::from).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public CommentReadDto get(@PathVariable int id) {
         return CommentReadDto.from(commentService.getById(id));
     }
-    @GetMapping
-    public List<CommentReadDto> getAll() {
-        return commentService.getAll().stream().map(CommentReadDto::from).collect(Collectors.toList());
-    }
+
 
     @GetMapping("/post/{id}")
     public List<CommentReadDto> getByPostId(@PathVariable int id) {

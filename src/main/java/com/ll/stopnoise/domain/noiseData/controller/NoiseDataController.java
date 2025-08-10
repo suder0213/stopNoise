@@ -25,34 +25,10 @@ public class NoiseDataController {
     private final ObjectMapper objectMapper;
     private final S3Service s3Service;
 
-    @GetMapping
-    public List<NoiseDataReadDto> getAllNoiseData() {
-        return noiseDataService.getAll().stream().map(NoiseDataReadDto::from).collect(Collectors.toList());
-    }
-    @GetMapping("/{id}")
-    public NoiseDataReadDto getNoiseDataById(@PathVariable int id) {
-        return NoiseDataReadDto.from(noiseDataService.getById(id));
-    }
     @PostMapping
     public NoiseDataReadDto createNoiseData(@RequestBody NoiseDataCreateDto noiseDataCreateDto) {
         return NoiseDataReadDto.from(noiseDataService.create(noiseDataCreateDto));
     }
-    @PutMapping
-    public NoiseDataReadDto updateNoiseData(@RequestBody NoiseDataUpdateDto noiseDataUpdateDto) {
-        return NoiseDataReadDto.from(noiseDataService.update(noiseDataUpdateDto));
-    }
-    @DeleteMapping("/{id}")
-    public String deleteNoiseDataById(@RequestParam int id) {
-        noiseDataService.delete(id);
-        return "NoiseData %d deleted".formatted(id);
-    }
-
-    @DeleteMapping("/file/{id}")
-    public String deleteNoiseDataByFile(@PathVariable int id) {
-        noiseDataService.deleteWithFile(id);
-        return "NoiseData %d deleted".formatted(id);
-    }
-
     @PostMapping("/upload")
     public NoiseDataReadDto uploadNoiseData(
             @RequestParam("file") MultipartFile file,
@@ -70,5 +46,31 @@ public class NoiseDataController {
             throw new RuntimeException(e);
         }
     }
+    @GetMapping
+    public List<NoiseDataReadDto> getAllNoiseData() {
+        return noiseDataService.getAll().stream().map(NoiseDataReadDto::from).collect(Collectors.toList());
+    }
+    @GetMapping("/{id}")
+    public NoiseDataReadDto getNoiseDataById(@PathVariable int id) {
+        return NoiseDataReadDto.from(noiseDataService.getById(id));
+    }
+
+    @PutMapping
+    public NoiseDataReadDto updateNoiseData(@RequestBody NoiseDataUpdateDto noiseDataUpdateDto) {
+        return NoiseDataReadDto.from(noiseDataService.update(noiseDataUpdateDto));
+    }
+    @DeleteMapping("/{id}")
+    public String deleteNoiseDataById(@RequestParam int id) {
+        noiseDataService.delete(id);
+        return "NoiseData %d deleted".formatted(id);
+    }
+
+    @DeleteMapping("/file/{id}")
+    public String deleteNoiseDataByFile(@PathVariable int id) {
+        noiseDataService.deleteWithFile(id);
+        return "NoiseData %d deleted".formatted(id);
+    }
+
+
 
 }
