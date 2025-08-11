@@ -8,7 +8,10 @@ import com.ll.stopnoise.domain.noiseData.controller.dto.NoiseDataUpdateDto;
 import com.ll.stopnoise.domain.noiseData.entity.NoiseData;
 import com.ll.stopnoise.domain.noiseData.service.NoiseDataService;
 import com.ll.stopnoise.domain.s3.service.S3Service;
+import com.ll.stopnoise.global.RsData;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,55 +28,85 @@ public class NoiseDataController {
     private final ObjectMapper objectMapper;
     private final S3Service s3Service;
 
-    // 불완전한 NoiseData 생성 ( 미사용 )
-    @PostMapping
-    public NoiseDataReadDto createNoiseData(@RequestBody NoiseDataCreateDto noiseDataCreateDto) {
-        return NoiseDataReadDto.from(noiseDataService.create(noiseDataCreateDto));
-    }
+    // POST: 파일과 데이터를 함께 업로드하여 NoiseData 생성
     @PostMapping("/upload")
-    public NoiseDataReadDto uploadNoiseData(
+    public ResponseEntity<RsData<NoiseDataReadDto>> uploadNoiseData(
             @RequestParam("file") MultipartFile file,
             @RequestParam("data") String data
     ) {
         try {
             String fileUrl = s3Service.uploadFile(file);
-
-            // TODO: fileUrl과 다른 데이터를 조합하여 NoiseData 엔티티 저장
-            // 예: noiseDataService.save(customer, fileUrl);
             NoiseDataCreateDto noiseDataCreateDto = objectMapper.readValue(data, NoiseDataCreateDto.class);
             NoiseData uploadedNoiseData = noiseDataService.createWithFile(noiseDataCreateDto, fileUrl);
-            return NoiseDataReadDto.from(uploadedNoiseData);
+            NoiseDataReadDto dto = NoiseDataReadDto.from(uploadedNoiseData);
+
+            RsData<NoiseDataReadDto> response = RsData.of("S-1", "파일 업로드 및 NoiseData 생성이 성공했습니다.", dto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            // 구체적인 예외 메시지를 포함하도록 수정
+            RsData<NoiseDataReadDto> response = RsData.of("F-1", "파일 업로드 또는 데이터 처리 중 오류가 발생했습니다: " + e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
+    // GET: 모든 NoiseData 조회
     @GetMapping
-    public List<NoiseDataReadDto> getAllNoiseData() {
-        return noiseDataService.getAll().stream().map(NoiseDataReadDto::from).collect(Collectors.toList());
+    public ResponseEntity<RsData<List<NoiseDataReadDto>>> getAllNoiseData() {
+        List<NoiseDataReadDto> dtoList = noiseDataService.getAll().stream()
+                .map(NoiseDataReadDto::from)
+                .collect(Collectors.toList());
+
+        RsData<List<NoiseDataReadDto>> response = RsData.of("S-1", "성공적으로 조회됨", dtoList);
+        return ResponseEntity.ok(response);
     }
+    // GET: ID로 특정 NoiseData 조회
     @GetMapping("/{id}")
-    public NoiseDataReadDto getNoiseDataById(@PathVariable int id) {
-        return NoiseDataReadDto.from(noiseDataService.getById(id));
+    public ResponseEntity<RsData<NoiseDataReadDto>> getNoiseDataById(@PathVariable int id) {
+        try {
+            NoiseData noiseData = noiseDataService.getById(id);
+            NoiseDataReadDto dto = NoiseDataReadDto.from(noiseData);
+            RsData<NoiseDataReadDto> response = RsData.of("S-1", "성공적으로 조회됨", dto);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            RsData<NoiseDataReadDto> response = RsData.of("F-1", "해당 ID의 NoiseData를 찾을 수 없음", null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
     }
+    // GET: 고객 ID로 모든 NoiseData 조회
     @GetMapping("/customer/{customer_id}")
-    public List<NoiseDataReadDto> getNoiseDataByCustomerId(@PathVariable int customer_id) {
-        return noiseDataService.getByCustomerId(customer_id).stream().map(NoiseDataReadDto::from).collect(Collectors.toList());
+    public ResponseEntity<RsData<List<NoiseDataReadDto>>> getNoiseDataByCustomerId(@PathVariable int customer_id) {
+        List<NoiseDataReadDto> dtoList = noiseDataService.getByCustomerId(customer_id).stream()
+                .map(NoiseDataReadDto::from)
+                .collect(Collectors.toList());
+
+        RsData<List<NoiseDataReadDto>> response = RsData.of("S-1", "성공적으로 조회됨", dtoList);
+        return ResponseEntity.ok(response);
     }
 
+    // PUT: NoiseData 수정
     @PutMapping
-    public NoiseDataReadDto updateNoiseData(@RequestBody NoiseDataUpdateDto noiseDataUpdateDto) {
-        return NoiseDataReadDto.from(noiseDataService.update(noiseDataUpdateDto));
-    }
-    @DeleteMapping("/{id}")
-    public String deleteNoiseDataById(@RequestParam int id) {
-        noiseDataService.delete(id);
-        return "NoiseData %d deleted".formatted(id);
+    public ResponseEntity<RsData<NoiseDataReadDto>> updateNoiseData(@RequestBody NoiseDataUpdateDto noiseDataUpdateDto) {
+        try {
+            NoiseData updatedNoiseData = noiseDataService.update(noiseDataUpdateDto);
+            NoiseDataReadDto dto = NoiseDataReadDto.from(updatedNoiseData);
+            RsData<NoiseDataReadDto> response = RsData.of("S-1", "성공적으로 수정됨", dto);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            RsData<NoiseDataReadDto> response = RsData.of("F-1", "해당 ID의 NoiseData를 찾을 수 없음", null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
     }
 
+    // DELETE: ID로 파일과 함께 NoiseData 삭제
     @DeleteMapping("/file/{id}")
-    public String deleteNoiseDataByWithFile(@PathVariable int id) {
-        noiseDataService.deleteWithFile(id);
-        return "NoiseData %d deleted".formatted(id);
+    public ResponseEntity<RsData<String>> deleteNoiseDataWithFile(@PathVariable int id) {
+        try {
+            noiseDataService.deleteWithFile(id);
+            RsData<String> response = RsData.of("S-1", "성공적으로 삭제됨", null);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            RsData<String> response = RsData.of("F-1", "해당 ID의 NoiseData를 찾을 수 없음", null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
     }
 
 
