@@ -1,5 +1,6 @@
 package com.ll.stopnoise.domain.noiseReport.service;
 
+import com.ll.stopnoise.domain.customer.entity.Customer;
 import com.ll.stopnoise.domain.customer.service.CustomerService;
 import com.ll.stopnoise.domain.gemini.service.GeminiService;
 import com.ll.stopnoise.domain.noiseData.entity.NoiseData;
@@ -32,13 +33,15 @@ public class NoiseReportService {
     @Transactional
     public NoiseReport create(NoiseReportCreateDto noiseReportCreateDto) {
 
+        Customer customer = customerService.getCustomer(noiseReportCreateDto.getCustomerId());
+
         LocalDate startDate = LocalDate.parse(noiseReportCreateDto.getStartDate());
         LocalDate endDate = LocalDate.parse(noiseReportCreateDto.getEndDate());
 
         LocalDateTime startDateTime = startDate.atStartOfDay();
         LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
 
-        List<NoiseData> noiseDataList = noiseDataService.getByUploadTimeBetween(startDateTime, endDateTime);;
+        List<NoiseData> noiseDataList = noiseDataService.getByCustomerAndUploadTimeBetween(customer, startDateTime, endDateTime);
         String analysisSummary = geminiService.noiseReportAnalysis(noiseDataList);
         NoiseReport noiseReport = NoiseReport.builder()
                 .customer(customerService.getCustomer(noiseReportCreateDto.getCustomerId()))
@@ -78,5 +81,10 @@ public class NoiseReportService {
             throw new IllegalArgumentException("No NoiseReport with id " + id + " found");
         }
         noiseReportRepository.delete(noiseReport.get());
+    }
+
+    public List<NoiseReport> getByCustomerId(Integer customerId) {
+        Customer customer = customerService.getCustomer(customerId);
+        return noiseReportRepository.findByCustomer(customer);
     }
 }

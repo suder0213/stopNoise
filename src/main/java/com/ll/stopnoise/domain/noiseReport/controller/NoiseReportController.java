@@ -28,6 +28,10 @@ public class NoiseReportController {
     public NoiseReportReadDto getOne(@PathVariable Integer id) {
         return NoiseReportReadDto.from(noiseReportService.getById(id));
     }
+    @GetMapping("/customer/{customer_id}")
+    public List<NoiseReportReadDto> getByCustomerId(@PathVariable Integer customer_id) {
+        return noiseReportService.getByCustomerId(customer_id).stream().map(NoiseReportReadDto::from).collect(Collectors.toList());
+    }
 //    @PutMapping
 //    public NoiseReportReadDto update(){
 //

@@ -25,6 +25,7 @@ public class NoiseDataController {
     private final ObjectMapper objectMapper;
     private final S3Service s3Service;
 
+    // 불완전한 NoiseData 생성 ( 미사용 )
     @PostMapping
     public NoiseDataReadDto createNoiseData(@RequestBody NoiseDataCreateDto noiseDataCreateDto) {
         return NoiseDataReadDto.from(noiseDataService.create(noiseDataCreateDto));
@@ -54,6 +55,10 @@ public class NoiseDataController {
     public NoiseDataReadDto getNoiseDataById(@PathVariable int id) {
         return NoiseDataReadDto.from(noiseDataService.getById(id));
     }
+    @GetMapping("/customer/{customer_id}")
+    public List<NoiseDataReadDto> getNoiseDataByCustomerId(@PathVariable int customer_id) {
+        return noiseDataService.getByCustomerId(customer_id).stream().map(NoiseDataReadDto::from).collect(Collectors.toList());
+    }
 
     @PutMapping
     public NoiseDataReadDto updateNoiseData(@RequestBody NoiseDataUpdateDto noiseDataUpdateDto) {
@@ -66,7 +71,7 @@ public class NoiseDataController {
     }
 
     @DeleteMapping("/file/{id}")
-    public String deleteNoiseDataByFile(@PathVariable int id) {
+    public String deleteNoiseDataByWithFile(@PathVariable int id) {
         noiseDataService.deleteWithFile(id);
         return "NoiseData %d deleted".formatted(id);
     }

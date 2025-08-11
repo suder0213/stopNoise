@@ -1,5 +1,6 @@
 package com.ll.stopnoise.domain.noiseData.service;
 
+import com.ll.stopnoise.domain.customer.entity.Customer;
 import com.ll.stopnoise.domain.customer.service.CustomerService;
 import com.ll.stopnoise.domain.noiseData.controller.dto.NoiseDataCreateDto;
 import com.ll.stopnoise.domain.noiseData.controller.dto.NoiseDataUpdateDto;
@@ -56,7 +57,7 @@ public class NoiseDataService {
             throw new IllegalArgumentException("No noise data found with id " + noiseDataUpdateDto.getId());
         }
         noiseData.get().setMemo(noiseDataUpdateDto.getMemo());
-        return noiseData.get();
+        return noiseDataRepository.save(noiseData.get());
     }
     @Transactional
     public void delete(int id) {
@@ -91,5 +92,16 @@ public class NoiseDataService {
 
         // 3. DB에서 NoiseData 엔티티 삭제
         noiseDataRepository.delete(noiseData);
+    }
+
+    public List<NoiseData> getByCustomerId(int customerId) {
+        List<NoiseData> noiseDataList = noiseDataRepository.findByCustomer(
+                customerService.getCustomer(customerId)
+        );
+        return noiseDataList;
+    }
+
+    public List<NoiseData> getByCustomerAndUploadTimeBetween(Customer customer, LocalDateTime start, LocalDateTime end) {
+        return noiseDataRepository.findByCustomerAndUploadTimeBetween(customer, start, end);
     }
 }
