@@ -23,29 +23,31 @@ public class GeminiService {
 
     private final String API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=";
 
-    public String askGemini(String prompt) {
-        RestTemplate restTemplate = new RestTemplate();
-        GeminiRequest request = new GeminiRequest(prompt);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<GeminiRequest> entity = new HttpEntity<>(request, headers);
-        ResponseEntity<GeminiResponse> response = restTemplate.exchange(
-                API_URL + apiKey,
-                HttpMethod.POST,
-                entity,
-                GeminiResponse.class
-        );
-        if (response.getBody() != null &&
-                !response.getBody().getCandidates().isEmpty()) {
-            return response.getBody().getCandidates()
-                    .get(0)
-                    .getContent()
-                    .getParts()
-                    .get(0)
-                    .getText();
-        }
-        return "응답 없음";
-    }
+
+    // Gemini API가 작동하는지 확인하기 위한 메소드
+//    public String askGemini(String prompt) {
+//        RestTemplate restTemplate = new RestTemplate();
+//        GeminiRequest request = new GeminiRequest(prompt);
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_JSON);
+//        HttpEntity<GeminiRequest> entity = new HttpEntity<>(request, headers);
+//        ResponseEntity<GeminiResponse> response = restTemplate.exchange(
+//                API_URL + apiKey,
+//                HttpMethod.POST,
+//                entity,
+//                GeminiResponse.class
+//        );
+//        if (response.getBody() != null &&
+//                !response.getBody().getCandidates().isEmpty()) {
+//            return response.getBody().getCandidates()
+//                    .get(0)
+//                    .getContent()
+//                    .getParts()
+//                    .get(0)
+//                    .getText();
+//        }
+//        return "응답 없음";
+//    }
 
     public String noiseReportAnalysis(List<NoiseData> noiseDataList){
         // 1. 엔티티 리스트를 DTO 리스트로 변환
