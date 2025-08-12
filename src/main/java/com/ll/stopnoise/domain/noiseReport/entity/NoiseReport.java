@@ -29,8 +29,11 @@ public class NoiseReport {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
-    @Column(columnDefinition = "TEXT")
-    private String analysisSummary;
+    private Integer averageNoiseDecibel;
+    private Integer maxNoiseDecibel;
+    private String maxNoiseType;
+    private Integer assumedStress;
+    private String AIAdvise;
 
     private LocalDateTime createAt;
 

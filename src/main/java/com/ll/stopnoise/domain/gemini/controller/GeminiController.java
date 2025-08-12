@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 
+// 만들어 놓긴 했는데 Gemini를 직접적으로 호출하는 일은 아마 없을것
 @RequestMapping("/api/gemini")
 public class GeminiController {
 

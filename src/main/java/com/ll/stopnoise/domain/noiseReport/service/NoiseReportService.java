@@ -43,11 +43,18 @@ public class NoiseReportService {
 
         List<NoiseData> noiseDataList = noiseDataService.getByCustomerAndUploadTimeBetween(customer, startDateTime, endDateTime);
         String analysisSummary = geminiService.noiseReportAnalysis(noiseDataList);
+        // 💡 Gemini 응답을 슬래시 기준으로 분리
+        String[] summaryParts = analysisSummary.split("/");
+
         NoiseReport noiseReport = NoiseReport.builder()
                 .customer(customerService.getCustomer(noiseReportCreateDto.getCustomerId()))
                 .startDate(startDateTime)
                 .endDate(endDateTime)
-                .analysisSummary(analysisSummary)
+                .averageNoiseDecibel(Integer.parseInt(summaryParts[0]))
+                .maxNoiseDecibel(Integer.parseInt(summaryParts[1]))
+                .maxNoiseType(summaryParts[2])
+                .assumedStress(Integer.parseInt(summaryParts[3]))
+                .AIAdvise(summaryParts[4])
                 .createAt(LocalDateTime.now())
                 .build();
         NoiseReport savedReport = noiseReportRepository.save(noiseReport);
@@ -60,6 +67,9 @@ public class NoiseReportService {
             reportNoiseData.setNoiseData(noiseData); // 소음 데이터와 연결
             reportNoiseDataRepository.save(reportNoiseData);
         }
+
+
+
         return savedReport;
 
     }

@@ -22,9 +22,14 @@ public class PostController {
     // POST: 게시글 생성
     @PostMapping
     public ResponseEntity<RsData<PostReadDto>> create(@RequestBody PostCreateDto postCreateDto) {
-        PostReadDto dto = PostReadDto.from(postService.create(postCreateDto));
-        RsData<PostReadDto> response = RsData.of("S-1", "게시글이 성공적으로 생성되었습니다.", dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        try {
+            PostReadDto dto = PostReadDto.from(postService.create(postCreateDto));
+            RsData<PostReadDto> response = RsData.of("S-1", "게시글이 성공적으로 생성되었습니다.", dto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        }catch (IllegalArgumentException e) {
+            RsData<PostReadDto> response = RsData.of("F-1", "유효하지 않은 게시물 양식입니다.", null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
     }
 
     // GET: 모든 게시글 조회

@@ -20,7 +20,10 @@ public class NoiseReportReadDto {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
-    private String analysisSummary;
+    private Integer averageNoiseDecibel;
+    private Integer maxNoiseDecibel;
+    private String maxNoiseType;
+    private String AIAdvise;
 
     private LocalDateTime createAt;
 
@@ -38,7 +41,10 @@ public class NoiseReportReadDto {
                 .customerId(noiseReport.getCustomer().getId())
                 .startDate(noiseReport.getStartDate())
                 .endDate(noiseReport.getEndDate())
-                .analysisSummary(noiseReport.getAnalysisSummary())
+                .averageNoiseDecibel(noiseReport.getAverageNoiseDecibel())
+                .maxNoiseDecibel(noiseReport.getMaxNoiseDecibel())
+                .maxNoiseType(noiseReport.getMaxNoiseType())
+                .AIAdvise(noiseReport.getAIAdvise())
                 .createAt(noiseReport.getCreateAt())
                 .reportNoiseDataIds(reportNoiseDataIds)
                 .build();

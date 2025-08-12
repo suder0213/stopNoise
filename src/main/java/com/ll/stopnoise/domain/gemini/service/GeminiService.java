@@ -66,16 +66,17 @@ public class GeminiService {
             e.printStackTrace(); // 콘솔에 상세한 스택 트레이스를 출력
             return "JSON 변환 실패";
         }
-        String prompt = "아래 JSON 형식의 파일들은 특정 기간 한 세대에서 동안 발생시킨 소음 목록이야.\n"
-                + "다른 아무 말도 하지 말고, 해당 파일들을 보고 다음 속성을 포함한 JSON 형식으로 답변을 해줘.\n"
-                + "만약 아무 데이터도 넘겨 받지 못했다면, int 값은 모두 0, assumedStress 는 공백, AIAdvise는 [데이터 없음]으로 보내.\n"
+        String prompt = "아래 JSON 형식의 파일들은 특정 기간 동안 한 세대에서 발생시킨 소음 목록이야.\n"
+                + "다른 아무 말도 하지 말고, 다음 속성들을 슬래시(/)로 구분된 하나의 문자열로 답변을 해줘.\n"
+                + "응답을 감싸는 마크다운(markdown) 문법(```)은 절대 사용하지 마.\n"
+                + "만약 아무 데이터도 넘겨 받지 못했다면, int 값은 모두 0, max_noise_type은 \"데이터 없음\", AIAdvise는 \"데이터 없음\"으로 보내.\n"
                 + "[속성]\n"
-                + "average_noise_decibel (int) : 해당 기간 동안 소음들의 평균 크기\n"
-                + "max_noise_decibel (int) : 해당 기간 동안 발생한 소음의 최대 크기\n"
-                + "max_noise_type (String) : 가장 큰 소음의 유형"
-                + "assumedStress (int) : 해당 소음으로 인해 다른 집이 느낄 것으로 추정되는 체감 스트레스 수치(0~100%)\n"
-                + "AIAdvise (String) : 현재 소음 상태에 대한 너의 조언 ( 구어체로 친숙하게, 2줄 정도 )\n"
-                + "\n[소음 데이터 목록]\n" // 줄바꿈을 추가하여 프롬프트와 데이터 구분
+                + "average_noise_decibel (int)\n"
+                + "max_noise_decibel (int)\n"
+                + "max_noise_type (String)\n"
+                + "assumedStress (int)\n"
+                + "AIAdvise (String) (이 속성은 슬래시를 포함하지 않도록 주의해줘)\n"
+                + "\n[소음 데이터 목록]\n"
                 + noiseDataJson;
 
         RestTemplate restTemplate = new RestTemplate();
