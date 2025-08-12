@@ -34,6 +34,9 @@ public class Post {
 
     private Integer viewCount;
 
+    @Column(nullable = true)
+    private String imageURL;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

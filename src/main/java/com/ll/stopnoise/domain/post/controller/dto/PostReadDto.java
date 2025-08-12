@@ -17,6 +17,7 @@ public class PostReadDto {
     private String content;
     private String category;
     private Integer viewCount;
+    private String imageUrl;
     private List<Integer> commentIds;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -33,6 +34,7 @@ public class PostReadDto {
                 .content(post.getContent())
                 .category(post.getCategory())
                 .viewCount(post.getViewCount())
+                .imageUrl(post.getImageURL())
                 .commentIds(commentIds)
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())

@@ -1,5 +1,7 @@
 package com.ll.stopnoise.domain.post.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ll.stopnoise.domain.post.controller.dto.PostCreateDto;
 import com.ll.stopnoise.domain.post.controller.dto.PostReadDto;
 import com.ll.stopnoise.domain.post.entity.Post;
@@ -9,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,12 +21,24 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/post")
 public class PostController {
     private final PostService postService;
+    private final ObjectMapper objectMapper;
 
     // POST: 게시글 생성
     @PostMapping
-    public ResponseEntity<RsData<PostReadDto>> create(@RequestBody PostCreateDto postCreateDto) {
+    public ResponseEntity<RsData<PostReadDto>> create(@RequestParam(value = "image", required = false) MultipartFile image,
+                                                      @RequestParam String data) {
+        PostCreateDto postCreateDto;
         try {
-            PostReadDto dto = PostReadDto.from(postService.create(postCreateDto));
+            // 💡 JSON 문자열을 PostCreateDto 객체로 변환
+            postCreateDto = objectMapper.readValue(data, PostCreateDto.class);
+        } catch (JsonProcessingException e) {
+            // 💡 JSON 파싱 관련 오류 발생 시 400 Bad Request 반환
+            RsData<PostReadDto> response = RsData.of("F-1", "게시물 데이터의 형식이 올바르지 않습니다.", null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+
+        try {
+            PostReadDto dto = PostReadDto.from(postService.create(image, postCreateDto));
             RsData<PostReadDto> response = RsData.of("S-1", "게시글이 성공적으로 생성되었습니다.", dto);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         }catch (IllegalArgumentException e) {

@@ -62,14 +62,7 @@ public class NoiseDataService {
         noiseData.get().setMemo(noiseDataUpdateDto.getMemo());
         return noiseDataRepository.save(noiseData.get());
     }
-    @Transactional
-    public void delete(int id) {
-        Optional<NoiseData> noiseData = noiseDataRepository.findById(id);
-        if(noiseData.isEmpty()) {
-            throw new IllegalArgumentException("No noise data found with id " + id);
-        }
-        noiseDataRepository.deleteById(id);
-    }
+
 
     @Transactional
     public NoiseData createWithFile(NoiseDataCreateDto noiseDataCreateDto, String fileUrl) {

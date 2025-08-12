@@ -5,9 +5,11 @@ import com.ll.stopnoise.domain.customer.entity.Customer;
 import com.ll.stopnoise.domain.post.controller.dto.PostCreateDto;
 import com.ll.stopnoise.domain.post.entity.Post;
 import com.ll.stopnoise.domain.post.repository.PostRepository;
+import com.ll.stopnoise.domain.s3.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,9 +20,12 @@ import java.util.Optional;
 public class PostService {
     private final CustomerRepository customerRepository;
     private final PostRepository postRepository;
+    private final S3Service s3Service;
+
+
 
     @Transactional
-    public Post create(PostCreateDto postCreateDto) {
+    public Post create(MultipartFile image, PostCreateDto postCreateDto) {
         if (!postCreateDto.getCategory().equals("notice") && !postCreateDto.getCategory().equals("community")) {
             throw new IllegalArgumentException("Invalid category");
         }
@@ -29,6 +34,14 @@ public class PostService {
         if (customer.isEmpty()) {
             throw new IllegalArgumentException("Customer not found");
         }
+        String imageURL = null;
+        if (postCreateDto.getCategory().equals("community") && !image.isEmpty()) {
+            try {
+                imageURL = s3Service.uploadFile(image);
+            }catch (Exception e){
+                throw new IllegalArgumentException("image upload failed");
+            }
+        }
 
         Post post = Post.builder()
                 .author(customer.get())
@@ -36,6 +49,7 @@ public class PostService {
                 .content(postCreateDto.getContent())
                 .category(postCreateDto.getCategory())
                 .viewCount(0)
+                .imageURL(imageURL)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
