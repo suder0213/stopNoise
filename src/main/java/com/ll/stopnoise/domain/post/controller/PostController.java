@@ -37,6 +37,16 @@ public class PostController {
         return ResponseEntity.ok(response);
     }
 
+    // GET: 특정 카테고리에 해당하는 글 조회
+    @GetMapping("/{category}")
+    public ResponseEntity<RsData<List<PostReadDto>>> getAllByCategory(@PathVariable String category) {
+        List<PostReadDto> dtoList = postService.getAllByCategory(category).stream()
+                .map(PostReadDto::from)
+                .collect(Collectors.toList());
+        RsData<List<PostReadDto>> response = RsData.of("S-1", "모든 게시글이 성공적으로 조회되었습니다.", dtoList);
+        return ResponseEntity.ok(response);
+    }
+
     // GET: 특정 게시글 조회
     @GetMapping("/{id}")
     public ResponseEntity<RsData<PostReadDto>> get(@PathVariable int id) {

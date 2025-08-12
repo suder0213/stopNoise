@@ -3,6 +3,7 @@ package com.ll.stopnoise.domain.noiseData.service;
 import com.ll.stopnoise.domain.customer.entity.Customer;
 import com.ll.stopnoise.domain.customer.service.CustomerService;
 import com.ll.stopnoise.domain.noiseData.controller.dto.NoiseDataCreateDto;
+import com.ll.stopnoise.domain.noiseData.controller.dto.NoiseDataDateAndCustomerRequestDto;
 import com.ll.stopnoise.domain.noiseData.controller.dto.NoiseDataUpdateDto;
 import com.ll.stopnoise.domain.noiseData.entity.NoiseData;
 import com.ll.stopnoise.domain.noiseData.repository.NoiseDataRepository;
@@ -12,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -103,5 +106,16 @@ public class NoiseDataService {
 
     public List<NoiseData> getByCustomerAndUploadTimeBetween(Customer customer, LocalDateTime start, LocalDateTime end) {
         return noiseDataRepository.findByCustomerAndUploadTimeBetween(customer, start, end);
+    }
+
+    public List<NoiseData> getByCustomerAndUploadTimeBetween(
+            NoiseDataDateAndCustomerRequestDto dto) {
+        Customer customer = customerService.getCustomer(dto.getCustomerId());
+        LocalDate startDate = LocalDate.parse(dto.getStartDate());
+        LocalDate endDate = LocalDate.parse(dto.getEndDate());
+
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
+        return noiseDataRepository.findByCustomerAndUploadTimeBetween(customer, startDateTime, endDateTime);
     }
 }

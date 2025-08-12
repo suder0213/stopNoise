@@ -3,6 +3,7 @@ package com.ll.stopnoise.domain.noiseData.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ll.stopnoise.domain.noiseData.controller.dto.NoiseDataCreateDto;
+import com.ll.stopnoise.domain.noiseData.controller.dto.NoiseDataDateAndCustomerRequestDto;
 import com.ll.stopnoise.domain.noiseData.controller.dto.NoiseDataReadDto;
 import com.ll.stopnoise.domain.noiseData.controller.dto.NoiseDataUpdateDto;
 import com.ll.stopnoise.domain.noiseData.entity.NoiseData;
@@ -76,6 +77,17 @@ public class NoiseDataController {
     public ResponseEntity<RsData<List<NoiseDataReadDto>>> getNoiseDataByCustomerId(@PathVariable int customer_id) {
         List<NoiseDataReadDto> dtoList = noiseDataService.getByCustomerId(customer_id).stream()
                 .map(NoiseDataReadDto::from)
+                .collect(Collectors.toList());
+
+        RsData<List<NoiseDataReadDto>> response = RsData.of("S-1", "성공적으로 조회됨", dtoList);
+        return ResponseEntity.ok(response);
+    }
+    // GET: 고객 ID와 특정 기간으로 NoiseData 조회
+    @GetMapping("/date")
+    public ResponseEntity<RsData<List<NoiseDataReadDto>>> getNoiseDataByDateAndCustomerId(
+            @RequestBody NoiseDataDateAndCustomerRequestDto dto){
+        List<NoiseDataReadDto> dtoList = noiseDataService.getByCustomerAndUploadTimeBetween(dto)
+                .stream().map(NoiseDataReadDto::from)
                 .collect(Collectors.toList());
 
         RsData<List<NoiseDataReadDto>> response = RsData.of("S-1", "성공적으로 조회됨", dtoList);

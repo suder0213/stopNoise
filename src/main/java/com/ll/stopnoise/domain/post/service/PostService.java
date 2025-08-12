@@ -21,6 +21,9 @@ public class PostService {
 
     @Transactional
     public Post create(PostCreateDto postCreateDto) {
+        if (!postCreateDto.getCategory().equals("notice") && !postCreateDto.getCategory().equals("community")) {
+            throw new IllegalArgumentException("Invalid category");
+        }
 
         Optional<Customer> customer = customerRepository.findById(postCreateDto.getAuthorId());
         if (customer.isEmpty()) {
@@ -64,11 +67,19 @@ public class PostService {
     }
 
 
+    @Transactional
     public void deletePost(int id) {
         Optional<Post> postOptional = postRepository.findById(id);
         if (postOptional.isEmpty()) {
             throw new IllegalArgumentException("No post found with id " + id);
         }
         postRepository.deleteById(id);
+    }
+
+    public List<Post> getAllByCategory(String category) {
+        if (!category.equals("notice") && !category.equals("community")) {
+            throw new IllegalArgumentException("Invalid category");
+        }
+        return postRepository.findByCategory(category);
     }
 }

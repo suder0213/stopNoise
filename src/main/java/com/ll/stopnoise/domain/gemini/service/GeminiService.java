@@ -70,9 +70,10 @@ public class GeminiService {
                 + "다른 아무 말도 하지 말고, 해당 파일들을 보고 다음 속성을 포함한 JSON 형식으로 답변을 해줘.\n"
                 + "만약 아무 데이터도 넘겨 받지 못했다면, int 값은 모두 0, assumedStress 는 공백, AIAdvise는 [데이터 없음]으로 보내.\n"
                 + "[속성]\n"
-                + "averageNoiseDecibel (int) : 해당 기간 동안 소음들의 평균 크기\n"
-                + "maxNoiseDecibel (int) : 해당 기간 동안 발생한 소음의 최대 크기\n"
-                + "assumedStress (String) : 해당 소음으로 인해 다른 집이 느낄 것으로 추정되는 스트레스 수준(하~상)\n"
+                + "average_noise_decibel (int) : 해당 기간 동안 소음들의 평균 크기\n"
+                + "max_noise_decibel (int) : 해당 기간 동안 발생한 소음의 최대 크기\n"
+                + "max_noise_type (String) : 가장 큰 소음의 유형"
+                + "assumedStress (int) : 해당 소음으로 인해 다른 집이 느낄 것으로 추정되는 체감 스트레스 수치(0~100%)\n"
                 + "AIAdvise (String) : 현재 소음 상태에 대한 너의 조언 ( 구어체로 친숙하게, 2줄 정도 )\n"
                 + "\n[소음 데이터 목록]\n" // 줄바꿈을 추가하여 프롬프트와 데이터 구분
                 + noiseDataJson;
