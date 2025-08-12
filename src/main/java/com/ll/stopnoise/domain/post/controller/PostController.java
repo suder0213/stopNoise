@@ -38,13 +38,18 @@ public class PostController {
     }
 
     // GET: 특정 카테고리에 해당하는 글 조회
-    @GetMapping("/{category}")
+    @GetMapping("/category/{category}")
     public ResponseEntity<RsData<List<PostReadDto>>> getAllByCategory(@PathVariable String category) {
-        List<PostReadDto> dtoList = postService.getAllByCategory(category).stream()
-                .map(PostReadDto::from)
-                .collect(Collectors.toList());
-        RsData<List<PostReadDto>> response = RsData.of("S-1", "모든 게시글이 성공적으로 조회되었습니다.", dtoList);
-        return ResponseEntity.ok(response);
+        try {
+            List<PostReadDto> dtoList = postService.getAllByCategory(category).stream()
+                    .map(PostReadDto::from)
+                    .collect(Collectors.toList());
+            RsData<List<PostReadDto>> response = RsData.of("S-1", "모든 게시글이 성공적으로 조회되었습니다.", dtoList);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            RsData<List<PostReadDto>> response = RsData.of("F-1", "유효하지 않은 게시물 양식입니다.", null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
     }
 
     // GET: 특정 게시글 조회
