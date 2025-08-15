@@ -8,10 +8,12 @@ import com.ll.stopnoise.domain.noiseData.controller.dto.NoiseDataUpdateDto;
 import com.ll.stopnoise.domain.noiseData.entity.NoiseData;
 import com.ll.stopnoise.domain.noiseData.repository.NoiseDataRepository;
 import com.ll.stopnoise.domain.s3.service.S3Service;
+import com.ll.stopnoise.domain.yamNet.service.YAMNetService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -25,6 +27,7 @@ public class NoiseDataService {
     private final NoiseDataRepository noiseDataRepository;
     private final CustomerService customerService;
     private final S3Service s3Service;
+    private final YAMNetService yamNetService;
 
     public List<NoiseData> getAll() {
         return noiseDataRepository.findAll();
@@ -65,8 +68,11 @@ public class NoiseDataService {
 
 
     @Transactional
-    public NoiseData createWithFile(NoiseDataCreateDto noiseDataCreateDto, String fileUrl) {
+    public NoiseData createWithFile(NoiseDataCreateDto noiseDataCreateDto, String fileUrl, MultipartFile file) {
         return noiseDataRepository.save(NoiseData.builder()
+                //YAMNet이 오디오 파일을 분석하는 로직 추가
+                
+
                 .customer(customerService.getCustomer(noiseDataCreateDto.getCustomerId()))
                 .decibelLevel(noiseDataCreateDto.getDecibelLevel())
                 .noiseType(noiseDataCreateDto.getNoiseType())

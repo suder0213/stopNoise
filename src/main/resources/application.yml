@@ -45,3 +45,7 @@ aws:
     static: ap-southeast-2 # 예: ap-northeast-2
   stack:
     auto: false
+
+yamnet:
+  api:
+    url: "http://43.220.2.194:5000"

@@ -38,7 +38,7 @@ public class NoiseDataController {
         try {
             String fileUrl = s3Service.uploadFile(file);
             NoiseDataCreateDto noiseDataCreateDto = objectMapper.readValue(data, NoiseDataCreateDto.class);
-            NoiseData uploadedNoiseData = noiseDataService.createWithFile(noiseDataCreateDto, fileUrl);
+            NoiseData uploadedNoiseData = noiseDataService.createWithFile(noiseDataCreateDto, fileUrl, file);
             NoiseDataReadDto dto = NoiseDataReadDto.from(uploadedNoiseData);
 
             RsData<NoiseDataReadDto> response = RsData.of("S-1", "파일 업로드 및 NoiseData 생성이 성공했습니다.", dto);
