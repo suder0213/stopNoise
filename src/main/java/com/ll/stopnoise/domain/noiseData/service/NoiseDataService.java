@@ -76,7 +76,7 @@ public class NoiseDataService {
                 
 
                 .customer(customerService.getCustomer(noiseDataCreateDto.getCustomerId()))
-                .decibelLevel(noiseDataCreateDto.gegittDecibelLevel())
+                .decibelLevel(noiseDataCreateDto.getDecibelLevel())
                 .noiseType(noiseType)
                 .dataFileUrl(fileUrl)
                 .memo(noiseDataCreateDto.getMemo())
