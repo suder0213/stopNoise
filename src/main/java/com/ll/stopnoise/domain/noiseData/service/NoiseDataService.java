@@ -69,13 +69,15 @@ public class NoiseDataService {
 
     @Transactional
     public NoiseData createWithFile(NoiseDataCreateDto noiseDataCreateDto, String fileUrl, MultipartFile file) {
+        // AI가 소리를 분석하여 타입을 결정하는 로직
+        String noiseType = yamNetService.analyzeAudio(fileUrl);
         return noiseDataRepository.save(NoiseData.builder()
                 //YAMNet이 오디오 파일을 분석하는 로직 추가
                 
 
                 .customer(customerService.getCustomer(noiseDataCreateDto.getCustomerId()))
-                .decibelLevel(noiseDataCreateDto.getDecibelLevel())
-                .noiseType(noiseDataCreateDto.getNoiseType())
+                .decibelLevel(noiseDataCreateDto.gegittDecibelLevel())
+                .noiseType(noiseType)
                 .dataFileUrl(fileUrl)
                 .memo(noiseDataCreateDto.getMemo())
                 .uploadTime(LocalDateTime.now())
