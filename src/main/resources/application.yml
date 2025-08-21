@@ -46,7 +46,6 @@ aws:
   stack:
     auto: false
 
-# 서버 부팅 때마다 최신화 필요
 yamnet:
   api:
-    url: "http://43.220.2.194:5000"
+    url: ${YAMNET_API_URL}
