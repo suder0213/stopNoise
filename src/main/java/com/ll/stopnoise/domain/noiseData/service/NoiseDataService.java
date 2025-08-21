@@ -1,5 +1,6 @@
 package com.ll.stopnoise.domain.noiseData.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ll.stopnoise.domain.customer.entity.Customer;
 import com.ll.stopnoise.domain.customer.service.CustomerService;
 import com.ll.stopnoise.domain.noiseData.controller.dto.NoiseDataCreateDto;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +30,13 @@ public class NoiseDataService {
     private final CustomerService customerService;
     private final S3Service s3Service;
     private final YAMNetService yamNetService;
+    private final ObjectMapper objectMapper;
+    private static final List<String> ALLOWED_AUDIO_TYPES = Arrays.asList(
+//            "audio/mpeg",  // .mp3
+            "audio/wave"   // .wav
+//            "audio/ogg",   // .ogg
+//            "audio/webm"   // .webm
+    );
 
     public List<NoiseData> getAll() {
         return noiseDataRepository.findAll();
@@ -68,13 +77,25 @@ public class NoiseDataService {
 
 
     @Transactional
-    public NoiseData createWithFile(NoiseDataCreateDto noiseDataCreateDto, String fileUrl, MultipartFile file) {
+    public NoiseData createWithFile(MultipartFile file, String data) {
+        String fileUrl;
+        NoiseDataCreateDto noiseDataCreateDto;
+        String contentType = file.getContentType();
+        if (contentType == null || !ALLOWED_AUDIO_TYPES.contains(contentType)) {
+            throw new IllegalArgumentException("Unsupported content type " + contentType);
+        }
+
+        try {
+            fileUrl = s3Service.uploadFile(file);
+            noiseDataCreateDto = objectMapper.readValue(data, NoiseDataCreateDto.class);
+        } catch (Exception e) {
+            // 구체적인 예외 메시지를 포함하도록 수정
+            throw new IllegalArgumentException("Error occurred while parsing file or uploading" + file.getOriginalFilename(), e);
+        }
         // AI가 소리를 분석하여 타입을 결정하는 로직
         String noiseType = yamNetService.analyzeAudio(fileUrl);
-        return noiseDataRepository.save(NoiseData.builder()
-                //YAMNet이 오디오 파일을 분석하는 로직 추가
-                
 
+        return noiseDataRepository.save(NoiseData.builder()
                 .customer(customerService.getCustomer(noiseDataCreateDto.getCustomerId()))
                 .decibelLevel(noiseDataCreateDto.getDecibelLevel())
                 .noiseType(noiseType)

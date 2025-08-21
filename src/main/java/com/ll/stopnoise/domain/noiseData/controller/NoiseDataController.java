@@ -1,14 +1,11 @@
 package com.ll.stopnoise.domain.noiseData.controller;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ll.stopnoise.domain.noiseData.controller.dto.NoiseDataCreateDto;
 import com.ll.stopnoise.domain.noiseData.controller.dto.NoiseDataDateAndCustomerRequestDto;
 import com.ll.stopnoise.domain.noiseData.controller.dto.NoiseDataReadDto;
 import com.ll.stopnoise.domain.noiseData.controller.dto.NoiseDataUpdateDto;
 import com.ll.stopnoise.domain.noiseData.entity.NoiseData;
 import com.ll.stopnoise.domain.noiseData.service.NoiseDataService;
-import com.ll.stopnoise.domain.s3.service.S3Service;
 import com.ll.stopnoise.global.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,39 +23,21 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class NoiseDataController {
     private final NoiseDataService noiseDataService;
-    private final ObjectMapper objectMapper;
-    private final S3Service s3Service;
     // 허용할 오디오 파일 형식 리스트
-    private static final List<String> ALLOWED_AUDIO_TYPES = Arrays.asList(
-            "audio/mpeg",  // .mp3
-            "audio/wave",   // .wav
-            "audio/ogg",   // .ogg
-            "audio/webm"   // .webm
-    );
+
     // POST: 파일과 데이터를 함께 업로드하여 NoiseData 생성
     @PostMapping("/upload")
     public ResponseEntity<RsData<NoiseDataReadDto>> uploadNoiseData(
             @RequestParam("file") MultipartFile file,
             @RequestParam("data") String data
     ) {
-        String contentType = file.getContentType();
-        if (contentType == null || !ALLOWED_AUDIO_TYPES.contains(contentType)) {
-            RsData<NoiseDataReadDto> response = RsData.of("F-1","지원하지 않는 파일 형식입니다.", null);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
-
         try {
-            String fileUrl = s3Service.uploadFile(file);
-            NoiseDataCreateDto noiseDataCreateDto = objectMapper.readValue(data, NoiseDataCreateDto.class);
-            NoiseData uploadedNoiseData = noiseDataService.createWithFile(noiseDataCreateDto, fileUrl, file);
-            NoiseDataReadDto dto = NoiseDataReadDto.from(uploadedNoiseData);
-
-            RsData<NoiseDataReadDto> response = RsData.of("S-1", "파일 업로드 및 NoiseData 생성이 성공했습니다.", dto);
+            NoiseDataReadDto dto = NoiseDataReadDto.from(noiseDataService.createWithFile(file, data));
+            RsData<NoiseDataReadDto> response = RsData.of("S-1", "성공적으로 생성됨", dto);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
-            // 구체적인 예외 메시지를 포함하도록 수정
-            RsData<NoiseDataReadDto> response = RsData.of("F-1", "파일 업로드 또는 데이터 처리 중 오류가 발생했습니다: " + e.getMessage(), null);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            RsData<NoiseDataReadDto> response = RsData.of("F-1", "NoiseData 생성 중 문제 발생", null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
     // GET: 모든 NoiseData 조회
