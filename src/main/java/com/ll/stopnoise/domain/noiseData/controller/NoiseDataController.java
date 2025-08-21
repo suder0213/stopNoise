@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,13 +29,25 @@ public class NoiseDataController {
     private final NoiseDataService noiseDataService;
     private final ObjectMapper objectMapper;
     private final S3Service s3Service;
-
+    // 허용할 오디오 파일 형식 리스트
+    private static final List<String> ALLOWED_AUDIO_TYPES = Arrays.asList(
+            "audio/mpeg",  // .mp3
+            "audio/wave",   // .wav
+            "audio/ogg",   // .ogg
+            "audio/webm"   // .webm
+    );
     // POST: 파일과 데이터를 함께 업로드하여 NoiseData 생성
     @PostMapping("/upload")
     public ResponseEntity<RsData<NoiseDataReadDto>> uploadNoiseData(
             @RequestParam("file") MultipartFile file,
             @RequestParam("data") String data
     ) {
+        String contentType = file.getContentType();
+        if (contentType == null || !ALLOWED_AUDIO_TYPES.contains(contentType)) {
+            RsData<NoiseDataReadDto> response = RsData.of("F-1","지원하지 않는 파일 형식입니다.", null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+
         try {
             String fileUrl = s3Service.uploadFile(file);
             NoiseDataCreateDto noiseDataCreateDto = objectMapper.readValue(data, NoiseDataCreateDto.class);
