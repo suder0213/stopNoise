@@ -26,9 +26,6 @@ public class NoiseData {
     private Integer decibelLevel;
     private String noiseType;
 
-    @Column(nullable = false)
-    private String dataFileUrl;
-
     @Column(columnDefinition = "TEXT")
     private String memo;
 

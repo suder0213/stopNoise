@@ -146,25 +146,24 @@ public class NoiseDataService {
         // AI가 소리를 분석하여 타입을 결정하는 로직
         String noiseType = yamNetService.analyzeAudio(fileUrl);
 
+        // 분석한 후 파일은 바로 삭제 (사생활 보호)
+        s3Service.deleteFile(fileUrl);
+        System.out.println("데이터 삭제 완료됨");
+
         return noiseDataRepository.save(NoiseData.builder()
                 .customer(customerService.getCustomer(noiseDataCreateDto.getCustomerId()))
                 .decibelLevel(noiseDataCreateDto.getDecibelLevel())
                 .noiseType(noiseType)
-                .dataFileUrl(fileUrl)
                 .memo(noiseDataCreateDto.getMemo())
                 .uploadTime(LocalDateTime.now())
                 .build());
     }
 
     @Transactional
-    public void deleteWithFile(int id) {
+    public void delete(int id) {
         // 1. DB에서 NoiseData 엔티티 조회
         NoiseData noiseData = noiseDataRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("NoiseData not found with id " + id));
-
-        // 2. S3Service를 통해 파일 삭제
-        String fileUrl = noiseData.getDataFileUrl();
-        s3Service.deleteFile(fileUrl);
 
         // 3. DB에서 NoiseData 엔티티 삭제
         noiseDataRepository.delete(noiseData);

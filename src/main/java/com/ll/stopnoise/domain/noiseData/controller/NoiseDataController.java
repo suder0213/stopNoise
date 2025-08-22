@@ -36,7 +36,7 @@ public class NoiseDataController {
             RsData<NoiseDataReadDto> response = RsData.of("S-1", "성공적으로 생성됨", dto);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
-            RsData<NoiseDataReadDto> response = RsData.of("F-1", "NoiseData 생성 중 문제 발생", null);
+            RsData<NoiseDataReadDto> response = RsData.of("F-1", e.getMessage(), null);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
@@ -103,11 +103,11 @@ public class NoiseDataController {
     @DeleteMapping("/file/{id}")
     public ResponseEntity<RsData<String>> deleteNoiseDataWithFile(@PathVariable int id) {
         try {
-            noiseDataService.deleteWithFile(id);
+            noiseDataService.delete(id);
             RsData<String> response = RsData.of("S-1", "성공적으로 삭제됨", null);
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
-            RsData<String> response = RsData.of("F-1", "해당 ID의 NoiseData를 찾을 수 없음", null);
+            RsData<String> response = RsData.of("F-1", e.getMessage(), null);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
