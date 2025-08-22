@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ll.stopnoise.domain.post.controller.dto.PostCreateDto;
 import com.ll.stopnoise.domain.post.controller.dto.PostReadDto;
+import com.ll.stopnoise.domain.post.controller.dto.PostUpdateDto;
 import com.ll.stopnoise.domain.post.entity.Post;
 import com.ll.stopnoise.domain.post.service.PostService;
 import com.ll.stopnoise.global.RsData;
@@ -88,9 +89,9 @@ public class PostController {
 
     // PUT: 게시글 수정
     @PutMapping
-    public ResponseEntity<RsData<PostReadDto>> update(@RequestBody Post post) {
+    public ResponseEntity<RsData<PostReadDto>> update(@RequestBody PostUpdateDto postUpdateDto) {
         try {
-            PostReadDto dto = PostReadDto.from(postService.updatePost(post));
+            PostReadDto dto = PostReadDto.from(postService.updatePost(postUpdateDto));
             RsData<PostReadDto> response = RsData.of("S-1", "게시글이 성공적으로 수정되었습니다.", dto);
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {

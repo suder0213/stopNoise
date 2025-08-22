@@ -3,6 +3,7 @@ package com.ll.stopnoise.domain.post.service;
 import com.ll.stopnoise.domain.customer.Repository.CustomerRepository;
 import com.ll.stopnoise.domain.customer.entity.Customer;
 import com.ll.stopnoise.domain.post.controller.dto.PostCreateDto;
+import com.ll.stopnoise.domain.post.controller.dto.PostUpdateDto;
 import com.ll.stopnoise.domain.post.entity.Post;
 import com.ll.stopnoise.domain.post.repository.PostRepository;
 import com.ll.stopnoise.domain.s3.service.S3Service;
@@ -69,14 +70,13 @@ public class PostService {
     }
 
     @Transactional
-    public Post updatePost(Post post) {
-        Optional<Post> postOptional = postRepository.findById(post.getId());
+    public Post updatePost(PostUpdateDto dto) {
+        Optional<Post> postOptional = postRepository.findById(dto.getId());
         if (postOptional.isEmpty()) {
-            throw new IllegalArgumentException("No post found with id " + post.getId());
+            throw new IllegalArgumentException("No post found with id " + dto.getId());
         }
         Post postToUpdate = postOptional.get();
-        postToUpdate.setTitle(post.getTitle());
-        postToUpdate.setContent(post.getContent());
+        postToUpdate.setContent(dto.getContent());
         return postRepository.save(postToUpdate);
     }
 
