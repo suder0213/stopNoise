@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ll.stopnoise.domain.post.controller.dto.PostCreateDto;
 import com.ll.stopnoise.domain.post.controller.dto.PostReadDto;
 import com.ll.stopnoise.domain.post.controller.dto.PostUpdateDto;
-import com.ll.stopnoise.domain.post.entity.Post;
 import com.ll.stopnoise.domain.post.service.PostService;
 import com.ll.stopnoise.global.RsData;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:5173", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE})
 @RequestMapping("/api/post")
 public class PostController {
     private final PostService postService;

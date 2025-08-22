@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 @Controller
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:5173", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE})
 @RequestMapping("/api/noiseData")
 @RequiredArgsConstructor
 public class NoiseDataController {

@@ -5,5 +5,5 @@ import lombok.Getter;
 @Getter
 public class NoiseDataUpdateDto {
     private int id;
-    private String memo;
+    private String uploadTime;
 }

@@ -24,6 +24,7 @@ import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +43,7 @@ public class NoiseDataService {
 //            "audio/ogg",   // .ogg
 //            "audio/webm"   // .webm
     );
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss");
 
     public List<NoiseData> getAll() {
         return noiseDataRepository.findAll();
@@ -69,14 +71,15 @@ public class NoiseDataService {
                 .build();
     }
     
-    // memo 정도만 수정 가능
+    // 시간 정도만 수정 가능
     @Transactional
     public NoiseData update(NoiseDataUpdateDto noiseDataUpdateDto) {
         Optional<NoiseData> noiseData = noiseDataRepository.findById(noiseDataUpdateDto.getId());
         if (noiseData.isEmpty()) {
             throw new IllegalArgumentException("No noise data found with id " + noiseDataUpdateDto.getId());
         }
-        noiseData.get().setMemo(noiseDataUpdateDto.getMemo());
+        LocalDateTime uploadTime = LocalDateTime.parse(noiseDataUpdateDto.getUploadTime(), FORMATTER);
+        noiseData.get().setUploadTime(uploadTime);
         return noiseDataRepository.save(noiseData.get());
     }
 
