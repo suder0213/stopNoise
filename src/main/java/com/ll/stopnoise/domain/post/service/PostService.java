@@ -76,6 +76,7 @@ public class PostService {
             throw new IllegalArgumentException("No post found with id " + dto.getId());
         }
         Post postToUpdate = postOptional.get();
+        postToUpdate.setTitle(dto.getTitle());
         postToUpdate.setContent(dto.getContent());
         return postRepository.save(postToUpdate);
     }
