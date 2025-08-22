@@ -45,6 +45,9 @@ public class NoiseReportService {
         String analysisSummary = geminiService.noiseReportAnalysis(noiseDataList);
         // 💡 Gemini 응답을 슬래시 기준으로 분리
         String[] summaryParts = analysisSummary.split("/");
+        if (summaryParts[2].equals("데이터 없음")) {
+            throw new IllegalArgumentException("데이터 없음");
+        }
 
         NoiseReport noiseReport = NoiseReport.builder()
                 .customer(customerService.getCustomer(noiseReportCreateDto.getCustomerId()))

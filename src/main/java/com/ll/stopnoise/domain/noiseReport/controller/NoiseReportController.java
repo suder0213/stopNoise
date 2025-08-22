@@ -21,9 +21,14 @@ public class NoiseReportController {
     // POST: NoiseReport 생성
     @PostMapping
     public ResponseEntity<RsData<NoiseReportReadDto>> create(@RequestBody NoiseReportCreateDto noiseReportCreateDto) {
-        NoiseReportReadDto dto = NoiseReportReadDto.from(noiseReportService.create(noiseReportCreateDto));
-        RsData<NoiseReportReadDto> response = RsData.of("S-1", "리포트가 성공적으로 생성되었습니다.", dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        try {
+            NoiseReportReadDto dto = NoiseReportReadDto.from(noiseReportService.create(noiseReportCreateDto));
+            RsData<NoiseReportReadDto> response = RsData.of("S-1", "리포트가 성공적으로 생성되었습니다.", dto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (Exception e) {
+            RsData<NoiseReportReadDto> response = RsData.of("F-1", "데이터를 넘겨 받지 못했습니다.", null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
     // GET: 모든 NoiseReport 조회
