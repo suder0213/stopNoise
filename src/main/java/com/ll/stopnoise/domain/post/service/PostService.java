@@ -88,6 +88,9 @@ public class PostService {
         if (postOptional.isEmpty()) {
             throw new IllegalArgumentException("No post found with id " + id);
         }
+        //이미지가 있다면 이미지 삭제
+        if(postOptional.get().getImageURL() != null)
+            s3Service.deleteFile(postOptional.get().getImageURL());
         postRepository.deleteById(id);
     }
 
