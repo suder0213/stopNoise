@@ -22,6 +22,7 @@ public class NoiseReportReadDto {
 
     private Integer averageNoiseDecibel;
     private Integer maxNoiseDecibel;
+    private Integer assumedStress;
     private String maxNoiseType;
     private String AIAdvise;
 
@@ -44,6 +45,7 @@ public class NoiseReportReadDto {
                 .averageNoiseDecibel(noiseReport.getAverageNoiseDecibel())
                 .maxNoiseDecibel(noiseReport.getMaxNoiseDecibel())
                 .maxNoiseType(noiseReport.getMaxNoiseType())
+                .assumedStress(noiseReport.getAssumedStress())
                 .AIAdvise(noiseReport.getAIAdvise())
                 .createAt(noiseReport.getCreateAt())
                 .reportNoiseDataIds(reportNoiseDataIds)

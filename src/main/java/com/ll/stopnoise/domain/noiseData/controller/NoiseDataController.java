@@ -58,29 +58,29 @@ public class NoiseDataController {
         RsData<List<NoiseDataReadDto>> response = RsData.of("S-1", "성공적으로 조회됨", dtoList);
         return ResponseEntity.ok(response);
     }
-    // GET: ID로 특정 NoiseData 조회
-    @GetMapping("/{id}")
-    public ResponseEntity<RsData<NoiseDataReadDto>> getNoiseDataById(@PathVariable int id) {
-        try {
-            NoiseData noiseData = noiseDataService.getById(id);
-            NoiseDataReadDto dto = NoiseDataReadDto.from(noiseData);
-            RsData<NoiseDataReadDto> response = RsData.of("S-1", "성공적으로 조회됨", dto);
-            return ResponseEntity.ok(response);
-        } catch (IllegalArgumentException e) {
-            RsData<NoiseDataReadDto> response = RsData.of("F-1", "해당 ID의 NoiseData를 찾을 수 없음", null);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
-    }
-    // GET: 고객 ID로 모든 NoiseData 조회
-    @GetMapping("/customer/{customer_id}")
-    public ResponseEntity<RsData<List<NoiseDataReadDto>>> getNoiseDataByCustomerId(@PathVariable int customer_id) {
-        List<NoiseDataReadDto> dtoList = noiseDataService.getByCustomerId(customer_id).stream()
-                .map(NoiseDataReadDto::from)
-                .collect(Collectors.toList());
-
-        RsData<List<NoiseDataReadDto>> response = RsData.of("S-1", "성공적으로 조회됨", dtoList);
-        return ResponseEntity.ok(response);
-    }
+//    // GET: ID로 특정 NoiseData 조회
+//    @GetMapping("/{id}")
+//    public ResponseEntity<RsData<NoiseDataReadDto>> getNoiseDataById(@PathVariable int id) {
+//        try {
+//            NoiseData noiseData = noiseDataService.getById(id);
+//            NoiseDataReadDto dto = NoiseDataReadDto.from(noiseData);
+//            RsData<NoiseDataReadDto> response = RsData.of("S-1", "성공적으로 조회됨", dto);
+//            return ResponseEntity.ok(response);
+//        } catch (IllegalArgumentException e) {
+//            RsData<NoiseDataReadDto> response = RsData.of("F-1", "해당 ID의 NoiseData를 찾을 수 없음", null);
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+//        }
+//    }
+//    // GET: 고객 ID로 모든 NoiseData 조회
+//    @GetMapping("/customer/{customer_id}")
+//    public ResponseEntity<RsData<List<NoiseDataReadDto>>> getNoiseDataByCustomerId(@PathVariable int customer_id) {
+//        List<NoiseDataReadDto> dtoList = noiseDataService.getByCustomerId(customer_id).stream()
+//                .map(NoiseDataReadDto::from)
+//                .collect(Collectors.toList());
+//
+//        RsData<List<NoiseDataReadDto>> response = RsData.of("S-1", "성공적으로 조회됨", dtoList);
+//        return ResponseEntity.ok(response);
+//    }
     // GET: 고객 ID와 특정 기간으로 NoiseData 조회
     @GetMapping("/date")
     public ResponseEntity<RsData<List<NoiseDataReadDto>>> getNoiseDataByDateAndCustomerId(
