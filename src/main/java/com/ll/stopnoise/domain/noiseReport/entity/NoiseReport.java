@@ -33,7 +33,14 @@ public class NoiseReport {
     private Integer maxNoiseDecibel;
     private String maxNoiseType;
     private Integer assumedStress;
-    private String AIAdvise;
+
+
+     private String staticalAnalyze;
+     private String caution;
+     private String noiseFeature;
+     private String recommendedAction;
+
+     private String hashtag;
 
     private LocalDateTime createAt;
 

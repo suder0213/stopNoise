@@ -81,8 +81,8 @@ public class NoiseDataController {
 //        RsData<List<NoiseDataReadDto>> response = RsData.of("S-1", "성공적으로 조회됨", dtoList);
 //        return ResponseEntity.ok(response);
 //    }
-    // GET: 고객 ID와 특정 기간으로 NoiseData 조회
-    @GetMapping("/date")
+    // POST: 고객 ID와 특정 기간으로 NoiseData 조회
+    @PostMapping("/date")
     public ResponseEntity<RsData<List<NoiseDataReadDto>>> getNoiseDataByDateAndCustomerId(
             @RequestBody NoiseDataDateAndCustomerRequestDto dto){
         List<NoiseDataReadDto> dtoList = noiseDataService.getByCustomerAndUploadTimeBetween(dto)

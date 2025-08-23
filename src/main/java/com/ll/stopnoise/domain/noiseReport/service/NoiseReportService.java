@@ -54,7 +54,11 @@ public class NoiseReportService {
                 .maxNoiseDecibel(Integer.parseInt(summaryParts[1]))
                 .maxNoiseType(summaryParts[2])
                 .assumedStress(Integer.parseInt(summaryParts[3]))
-                .AIAdvise(summaryParts[4].trim())
+                .staticalAnalyze(summaryParts[4].trim())
+                .caution(summaryParts[5].trim())
+                .noiseFeature(summaryParts[6].trim())
+                .recommendedAction(summaryParts[7].trim())
+                .hashtag(summaryParts[8].trim())
                 .createAt(LocalDateTime.now())
                 .build();
         NoiseReport savedReport = noiseReportRepository.save(noiseReport);

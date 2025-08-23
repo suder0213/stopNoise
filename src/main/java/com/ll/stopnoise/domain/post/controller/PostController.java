@@ -25,13 +25,13 @@ public class PostController {
     // POST: 게시글 생성
     @PostMapping
     public ResponseEntity<RsData<PostReadDto>> create(@RequestParam(value = "image", required = false) MultipartFile image,
-                                                      @RequestParam String customerId,
+                                                      @RequestParam int customerId,
                                                       @RequestParam(required = false) String title,
                                                       @RequestParam String content,
                                                       @RequestParam String category) {
 
         PostCreateDto postCreateDto = PostCreateDto.builder()
-                .customerId(Integer.parseInt(customerId))
+                .customerId(customerId)
                 .title(title)
                 .content(content)
                 .category(category)

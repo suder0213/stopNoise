@@ -24,7 +24,13 @@ public class NoiseReportReadDto {
     private Integer maxNoiseDecibel;
     private Integer assumedStress;
     private String maxNoiseType;
-    private String AIAdvise;
+
+
+    private String staticalAnalyze;
+    private String caution;
+    private String noiseFeature;
+    private String recommendedAction;
+    private String hashtag;
 
     private LocalDateTime createAt;
 
@@ -46,7 +52,11 @@ public class NoiseReportReadDto {
                 .maxNoiseDecibel(noiseReport.getMaxNoiseDecibel())
                 .maxNoiseType(noiseReport.getMaxNoiseType())
                 .assumedStress(noiseReport.getAssumedStress())
-                .AIAdvise(noiseReport.getAIAdvise())
+                .staticalAnalyze(noiseReport.getStaticalAnalyze())
+                .caution(noiseReport.getCaution())
+                .noiseFeature(noiseReport.getNoiseFeature())
+                .recommendedAction(noiseReport.getRecommendedAction())
+                .hashtag(noiseReport.getHashtag())
                 .createAt(noiseReport.getCreateAt())
                 .reportNoiseDataIds(reportNoiseDataIds)
                 .build();
