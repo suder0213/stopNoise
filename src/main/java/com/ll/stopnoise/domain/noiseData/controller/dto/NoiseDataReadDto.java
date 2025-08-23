@@ -19,8 +19,6 @@ public class NoiseDataReadDto {
     private Integer decibelLevel;
     private String noiseType;
 
-    private String memo;
-
     private LocalDateTime uploadTime;
 
     private List<Integer> reportNoiseDataIds;
@@ -37,7 +35,6 @@ public class NoiseDataReadDto {
                 .customerId(noiseData.getCustomer().getId())
                 .decibelLevel(noiseData.getDecibelLevel())
                 .noiseType(noiseData.getNoiseType())
-                .memo(noiseData.getMemo())
                 .uploadTime(noiseData.getUploadTime())
                 .reportNoiseDataIds(reportNoiseDataIds_)
                 .build();

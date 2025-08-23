@@ -1,6 +1,5 @@
 package com.ll.stopnoise.domain.post.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ll.stopnoise.domain.post.controller.dto.PostCreateDto;
 import com.ll.stopnoise.domain.post.controller.dto.PostReadDto;
@@ -26,17 +25,17 @@ public class PostController {
     // POST: 게시글 생성
     @PostMapping
     public ResponseEntity<RsData<PostReadDto>> create(@RequestParam(value = "image", required = false) MultipartFile image,
-                                                      @RequestParam String data) {
-        PostCreateDto postCreateDto;
-        try {
-            // 💡 JSON 문자열을 PostCreateDto 객체로 변환
-            postCreateDto = objectMapper.readValue(data, PostCreateDto.class);
-        } catch (JsonProcessingException e) {
-            // 💡 JSON 파싱 관련 오류 발생 시 400 Bad Request 반환
-            RsData<PostReadDto> response = RsData.of("F-1", "게시물 데이터의 형식이 올바르지 않습니다.", null);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
+                                                      @RequestParam String customerId,
+                                                      @RequestParam(required = false) String title,
+                                                      @RequestParam String content,
+                                                      @RequestParam String category) {
 
+        PostCreateDto postCreateDto = PostCreateDto.builder()
+                .customerId(Integer.parseInt(customerId))
+                .title(title)
+                .content(content)
+                .category(category)
+                .build();
         try {
             PostReadDto dto = PostReadDto.from(postService.create(image, postCreateDto));
             RsData<PostReadDto> response = RsData.of("S-1", "게시글이 성공적으로 생성되었습니다.", dto);

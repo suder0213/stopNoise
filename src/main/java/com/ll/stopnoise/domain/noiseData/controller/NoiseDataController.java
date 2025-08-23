@@ -1,6 +1,7 @@
 package com.ll.stopnoise.domain.noiseData.controller;
 
 
+import com.ll.stopnoise.domain.noiseData.controller.dto.NoiseDataCreateDto;
 import com.ll.stopnoise.domain.noiseData.controller.dto.NoiseDataDateAndCustomerRequestDto;
 import com.ll.stopnoise.domain.noiseData.controller.dto.NoiseDataReadDto;
 import com.ll.stopnoise.domain.noiseData.controller.dto.NoiseDataUpdateDto;
@@ -29,10 +30,17 @@ public class NoiseDataController {
     @PostMapping("/upload")
     public ResponseEntity<RsData<NoiseDataReadDto>> uploadNoiseData(
             @RequestParam("file") MultipartFile file,
-            @RequestParam("data") String data
+            @RequestParam int customerId,
+            @RequestParam Integer decibelLevel
     ) {
+        NoiseDataCreateDto noiseDataCreateDto = NoiseDataCreateDto.builder()
+                .customerId(customerId)
+                .decibelLevel(decibelLevel)
+                .memo(null)
+                .noiseType(null)
+                .build();
         try {
-            NoiseDataReadDto dto = NoiseDataReadDto.from(noiseDataService.createWithFile(file, data));
+            NoiseDataReadDto dto = NoiseDataReadDto.from(noiseDataService.createWithFile(file, noiseDataCreateDto));
             RsData<NoiseDataReadDto> response = RsData.of("S-1", "성공적으로 생성됨", dto);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {

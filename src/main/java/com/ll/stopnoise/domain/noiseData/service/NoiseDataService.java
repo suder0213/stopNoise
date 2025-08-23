@@ -85,9 +85,8 @@ public class NoiseDataService {
 
 
     @Transactional
-    public NoiseData createWithFile(MultipartFile file, String data) {
+    public NoiseData createWithFile(MultipartFile file, NoiseDataCreateDto dto) {
         String fileUrl;
-        NoiseDataCreateDto noiseDataCreateDto;
         String contentType = file.getContentType();
         if (contentType == null || !ALLOWED_AUDIO_TYPES.contains(contentType)) {
             throw new IllegalArgumentException("Unsupported content type " + contentType);
@@ -137,7 +136,6 @@ public class NoiseDataService {
 
             // 4. 변환된(혹은 원본) 파일을 S3에 업로드
             fileUrl = s3Service.uploadFile(fileToUpload);
-            noiseDataCreateDto = objectMapper.readValue(data, NoiseDataCreateDto.class);
 
             // 5. 임시 파일 정리
             audioInputStream.close();
@@ -154,10 +152,10 @@ public class NoiseDataService {
         System.out.println("데이터 삭제 완료됨");
 
         return noiseDataRepository.save(NoiseData.builder()
-                .customer(customerService.getCustomer(noiseDataCreateDto.getCustomerId()))
-                .decibelLevel(noiseDataCreateDto.getDecibelLevel())
+                .customer(customerService.getCustomer(dto.getCustomerId()))
+                .decibelLevel(dto.getDecibelLevel())
                 .noiseType(noiseType)
-                .memo(noiseDataCreateDto.getMemo())
+                .memo(dto.getMemo())
                 .uploadTime(LocalDateTime.now())
                 .build());
     }

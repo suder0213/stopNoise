@@ -31,7 +31,7 @@ public class PostService {
             throw new IllegalArgumentException("Invalid category");
         }
 
-        Optional<Customer> customer = customerRepository.findById(postCreateDto.getAuthorId());
+        Optional<Customer> customer = customerRepository.findById(postCreateDto.getCustomerId());
         if (customer.isEmpty()) {
             throw new IllegalArgumentException("Customer not found");
         }
@@ -95,6 +95,6 @@ public class PostService {
         if (!category.equals("notice") && !category.equals("community")) {
             throw new IllegalArgumentException("Invalid category");
         }
-        return postRepository.findByCategory(category);
+        return postRepository.findByCategoryOrderByCreatedAtDesc(category);
     }
 }
