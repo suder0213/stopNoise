@@ -72,7 +72,7 @@ public class GeminiService {
                 + "소음에 대한 기준은 「공동주택 층간소음의 범위와 기준에 관한 규칙」 법령을 참고해.\n"
                 + "AIAdvise에 포함되어야 할 내용은 \'내가 발생시키는 소음\'에 대한 내용이야.\n"
                 + "작은 소음에 대해 계속 주의를 주면 스트레스를 받을 수 있으니, 가능하면 좋게 얘기해\n"
-                + "만약 소음 데이터 목록을 넘겨 받지 못 했다면, int 값은 모두 0, max_noise_type은 \"데이터 없음\", AIAdvise는 \"데이터 없음\"으로 보내.\n"
+                + "만약 소음 데이터 목록을 넘겨 받지 못 했다면, int 값은 모두 0, max_noise_type은 \"데이터 없음\", AIAdvise는 \"발생한 소음이 없습니다!\"으로 보내.\n"
                 + "[속성]\n"
                 + "average_noise_decibel (int)\n"
                 + "max_noise_decibel (int)\n"

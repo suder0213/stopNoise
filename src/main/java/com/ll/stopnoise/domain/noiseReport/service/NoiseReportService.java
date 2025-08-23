@@ -45,9 +45,6 @@ public class NoiseReportService {
         String analysisSummary = geminiService.noiseReportAnalysis(noiseDataList);
         // 💡 Gemini 응답을 슬래시 기준으로 분리
         String[] summaryParts = analysisSummary.split("/");
-        if (summaryParts[2].equals("데이터 없음")) {
-            throw new IllegalArgumentException("데이터 없음");
-        }
 
         NoiseReport noiseReport = NoiseReport.builder()
                 .customer(customerService.getCustomer(noiseReportCreateDto.getCustomerId()))
@@ -57,7 +54,7 @@ public class NoiseReportService {
                 .maxNoiseDecibel(Integer.parseInt(summaryParts[1]))
                 .maxNoiseType(summaryParts[2])
                 .assumedStress(Integer.parseInt(summaryParts[3]))
-                .AIAdvise(summaryParts[4])
+                .AIAdvise(summaryParts[4].trim())
                 .createAt(LocalDateTime.now())
                 .build();
         NoiseReport savedReport = noiseReportRepository.save(noiseReport);
