@@ -40,6 +40,7 @@ public class NoiseDataService {
     private static final List<String> ALLOWED_AUDIO_TYPES = Arrays.asList(
 //            "audio/mpeg",  // .mp3
             "audio/wave"   // .wav
+            ,"audio/wav"
 //            "audio/ogg",   // .ogg
 //            "audio/webm"   // .webm
     );

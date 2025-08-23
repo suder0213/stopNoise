@@ -23,7 +23,6 @@ public class Post {
     @JoinColumn(name = "author", nullable = false)
     private Customer author;
 
-    @Column(nullable = false)
     private String title;
 
     @Column(columnDefinition = "TEXT",nullable = false)

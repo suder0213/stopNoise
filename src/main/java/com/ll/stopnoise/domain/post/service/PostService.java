@@ -36,7 +36,7 @@ public class PostService {
             throw new IllegalArgumentException("Customer not found");
         }
         String imageURL = null;
-        if (postCreateDto.getCategory().equals("community") && !image.isEmpty()) {
+        if (postCreateDto.getCategory().equals("community") && image != null) {
             try {
                 imageURL = s3Service.uploadFile(image);
             }catch (Exception e){
