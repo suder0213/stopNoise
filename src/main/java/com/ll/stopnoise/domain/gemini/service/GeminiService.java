@@ -77,13 +77,13 @@ public class GeminiService {
                 + "[속성]\n"
                 + "average_noise_decibel (int)\n"
                 + "max_noise_decibel (int)\n"
-                + "max_noise_type (String)\n"
+                + "max_noise_type (String) (한국어로 번역해서 전달)\n"
                 + "assumedStress (int)\n"
                 + "StaticalAnalyze (String) (해당 세대의 소음에 대한 수치를 포함한 객관적 분석 3문장)\n"
                 + "Caution (String) (소음 지속 시간, 취약 시간, 주의 시간에 대한 조언 3문장)\n"
                 + "NoiseFeatured (String) (최빈 소음 유형, 소음 평균, 최대 소음, 소음 빈도에 대한 분석 3문장)\n"
                 + "RecommendedAction (String) (소음을 줄이기 위해 할만한 노력 3문장. 가능하면 구체적 숫자 포함)\n"
-                + "Hashtag (String) (분석에 포함된 소음들을 요약 할만한 단어 3개를 , (반점)으로 구분하여 제시)"
+                + "Hashtag (String) (분석에 포함된 소음들을 요약 할만한 단어 3개를 , (반점)으로 구분하여 한국어로 제시)"
                 + "\n\n[소음 데이터 목록]\n"
                 + noiseDataJson;
 

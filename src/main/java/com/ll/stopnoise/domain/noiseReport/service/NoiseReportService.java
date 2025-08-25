@@ -101,4 +101,11 @@ public class NoiseReportService {
         Customer customer = customerService.getCustomer(customerId);
         return noiseReportRepository.findByCustomer(customer);
     }
+
+    public void deleteAll() {
+        if(noiseReportRepository.findAll().isEmpty()) {
+            throw new IllegalArgumentException("No NoiseReport found");
+        }
+        noiseReportRepository.deleteAll();
+    }
 }

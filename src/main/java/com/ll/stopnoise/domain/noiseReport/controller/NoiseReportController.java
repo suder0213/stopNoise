@@ -84,4 +84,15 @@ public class NoiseReportController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
+    @DeleteMapping("/all")
+    public ResponseEntity<RsData<String>> deleteAll() {
+        try {
+            noiseReportService.deleteAll();
+            RsData<String> response = RsData.of("S-1", "리포트가 성공적으로 삭제되었습니다.", null);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            RsData<String> response = RsData.of("F-1", "리포트가 없습니다.", null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
 }
