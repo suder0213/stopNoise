@@ -1,13 +1,10 @@
 package com.ll.stopnoise.domain.noiseReport.entity;
 
 import com.ll.stopnoise.domain.customer.entity.Customer;
-import com.ll.stopnoise.domain.reportNoiseData.entity.ReportNoiseData;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -43,8 +40,4 @@ public class NoiseReport {
      private String hashtag;
 
     private LocalDateTime createAt;
-
-    @OneToMany(mappedBy = "noiseReport", cascade = CascadeType.ALL)
-    @Builder.Default
-    private List<ReportNoiseData> reportNoiseData = new ArrayList<>();
 }

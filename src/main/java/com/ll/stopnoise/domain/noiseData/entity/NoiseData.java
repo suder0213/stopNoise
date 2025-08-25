@@ -1,12 +1,10 @@
 package com.ll.stopnoise.domain.noiseData.entity;
 
 import com.ll.stopnoise.domain.customer.entity.Customer;
-import com.ll.stopnoise.domain.reportNoiseData.entity.ReportNoiseData;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter
@@ -30,7 +28,4 @@ public class NoiseData {
     private String memo;
 
     private LocalDateTime uploadTime;
-
-    @OneToMany(mappedBy = "noiseData")
-    private List<ReportNoiseData> reportNoiseDatas;
 }

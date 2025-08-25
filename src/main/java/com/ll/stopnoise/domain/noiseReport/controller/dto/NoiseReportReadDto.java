@@ -5,9 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -34,14 +31,7 @@ public class NoiseReportReadDto {
 
     private LocalDateTime createAt;
 
-    private List<Integer> reportNoiseDataIds;
-
     public static NoiseReportReadDto from(NoiseReport noiseReport) {
-        // 수정된 부분: Stream을 사용하여 간결하게 ID 목록을 생성
-        List<Integer> reportNoiseDataIds = noiseReport.getReportNoiseData() != null ?
-                noiseReport.getReportNoiseData().stream()
-                        .map(reportNoiseData -> reportNoiseData.getId()) // 💡 reportNoiseData.getId()로 수정
-                        .collect(Collectors.toList()) : new ArrayList<>();
 
         NoiseReportReadDto noiseReportReadDto = NoiseReportReadDto.builder()
                 .id(noiseReport.getId())
@@ -58,7 +48,6 @@ public class NoiseReportReadDto {
                 .recommendedAction(noiseReport.getRecommendedAction())
                 .hashtag(noiseReport.getHashtag())
                 .createAt(noiseReport.getCreateAt())
-                .reportNoiseDataIds(reportNoiseDataIds)
                 .build();
         return noiseReportReadDto;
     }
