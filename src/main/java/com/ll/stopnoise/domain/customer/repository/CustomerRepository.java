@@ -1,4 +1,4 @@
-package com.ll.stopnoise.domain.customer.Repository;
+package com.ll.stopnoise.domain.customer.repository;
 
 import com.ll.stopnoise.domain.customer.entity.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;

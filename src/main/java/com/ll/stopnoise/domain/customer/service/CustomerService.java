@@ -1,6 +1,6 @@
 package com.ll.stopnoise.domain.customer.service;
 
-import com.ll.stopnoise.domain.customer.Repository.CustomerRepository;
+import com.ll.stopnoise.domain.customer.repository.CustomerRepository;
 import com.ll.stopnoise.domain.customer.controller.dto.CustomerCreateDto;
 import com.ll.stopnoise.domain.customer.controller.dto.CustomerUpdateDto;
 import com.ll.stopnoise.domain.customer.entity.Customer;
